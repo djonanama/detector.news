@@ -1,0 +1,74 @@
+.comment-navigation,
+.posts-navigation,
+.post-navigation {
+	.site-main & {
+		background-color: $primary-color-medium;
+		padding: 1em;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+
+.nav-links,
+.images-navigation {
+	display: flex;
+	justify-content: space-around;
+
+	.nav-previous,
+	.nav-next {
+		a:link,
+		a:visited {
+			color: $primary-text-color;
+		}
+	}
+
+	.nav-previous .material-icons {
+		margin-right: 0.5em;
+	}
+
+	.nav-next .material-icons {
+		margin-left: 0.5em;
+	}
+
+	.nav-previous .material-icons,
+	.nav-next .material-icons {
+		/* Google's material icons are displayed as inline-block */
+		/* setting a vertical-align makes the text line up with the icons */
+		vertical-align: bottom;
+	}
+}
+
+.images-navigation {
+	padding: 1em;
+}
+
+.comment-navigation .nav-links {
+	justify-content: space-between;
+}
+
+@media (min-width: 37.5em) {
+	.site-main .comment-navigation {
+		border-radius: 2px;
+	}
+}
+
+@media (min-width: 80em) {
+	.blog .site-main,
+	.search .site-main,
+	.archive .site-main {
+
+		.posts-navigation {
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+		}
+
+		article + .posts-navigation {
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+
+	}
+
+}

@@ -1,0 +1,125 @@
+version: '3.8'
+
+services:
+    database-mongodb:
+        image: mongo:4.4.1
+        container_name: mongodb-database
+        hostname: mongodb
+        restart: always
+        volumes:
+            - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+            - ./mongodb/data/db/:/data/db/
+        env_file:
+            - .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+            MONGO_INITDB_USERNAME: ${MONGO_INITDB_USERNAME}
+            MONGO_INITDB_PASSWORD: ${MONGO_INITDB_PASSWORD}
+            MONGO_REPLICA_SET_NAME: ${MONGO_REPLICA_SET_NAME}
+        ports:
+            - "27017:27017"
+        networks:
+            - mevn-app-network
+        command: --auth
+
+
+    backend-node:
+        image: "node:12.19.0"
+        depends_on:
+            - database-mongodb
+        working_dir: /home/node/app
+        container_name: node-backend
+        restart: always
+        # environment:
+        # - NODE_ENV=production
+        volumes:
+            - ./dist/:/home/node/app/dist
+            - ./node_modules/:/home/node/app/node_modules
+            - ./server/:/home/node/app/server
+            - ./babel.config.js:/home/node/app/babel.config.js
+            - ./now.json:/home/node/app/now.json
+            - ./package.json:/home/node/app/package.json
+            - ./vue.config.js:/home/node/app/vue.config.js
+        ports:
+            - "3000:3000"
+        networks:
+            - mevn-app-network
+        command: "yarn run ser"
+
+
+    database-wp:
+        image: mysql:8.0.21
+        container_name: wp-database
+        depends_on:
+            - backend-node
+        restart: always
+        env_file: .env
+        environment:
+            - MYSQL_DATABASE=wordpress
+        command: ['--default-authentication-plugin=mysql_native_password','--lower_case_table_names=1']
+        volumes:
+            - ./wordpress/mysql-db/db:/var/lib/mysql
+        networks:
+            - mevn-app-network
+    
+    wordpress-cms:
+        depends_on:
+            - database-wp
+        image: wordpress:5.5.1-fpm-alpine
+        container_name: cms-wordpress
+        restart: always
+        env_file: .env
+        ports:
+            - "9000:9000"
+        environment:
+            - WORDPRESS_DB_HOST=database-wp:3306
+            - WORDPRESS_DB_USER=$MYSQL_USER
+            - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+            - WORDPRESS_DB_NAME=wordpress
+            - WORDPRESS_CONFIG_EXTRA=DEFINE('WP_HOME','HTTP://localhost/cms-admin-detector');DEFINE('WP_SITEURL','HTTP://localhost/cms-admin-detector');
+            # - WORDPRESS_CONFIG_EXTRA:define('WP_HOME','HTTP://localhost/cms-admin-detector');define('WP_SITEURL','HTTP://localhost/cms-admin-detector');
+        volumes:
+            - ./wordpress/html:/var/www/html/cms-admin-detector
+            - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
+        networks:
+            - mevn-app-network
+
+
+    webserver-detector:
+        image: nginx:1.15.12-alpine
+        depends_on:
+            - backend-node
+            - wordpress-cms
+        container_name: webserver
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./dist:/var/www/html/mevn-app
+            - ./wordpress/html:/var/www/html/cms-admin-detector
+            - ./nginx/nginx-conf:/etc/nginx/conf.d
+            - certbot-etc-mevn:/etc/letsencrypt
+        networks:
+            - mevn-app-network
+
+    # certbot:
+    #     depends_on:
+    #         - webserver-detector
+    #     image: certbot/certbot
+    #     container_name: certbot
+    #     volumes:
+    #         - certbot-etc-mevn:/etc/letsencrypt
+    #         - ./dist:/var/www/html
+    #     command: certonly --webroot --webroot-path=/var/www/html --email mihail.parfenyuk@gmail.com --agree-tos --no-eff-email --force-renewal -d detector.new
+
+
+
+volumes:
+    certbot-etc-mevn:
+
+networks:
+    mevn-app-network:
+        driver: bridge

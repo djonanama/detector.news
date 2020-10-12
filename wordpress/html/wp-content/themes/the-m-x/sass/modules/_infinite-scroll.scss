@@ -1,0 +1,35 @@
+/* Globally hidden elements when Infinite Scroll is supported and in use. */
+.infinite-scroll .posts-navigation, /* Older / Newer Posts Navigation (always hidden) */
+.infinite-scroll.neverending .site-footer { /* Theme Footer (when set to scrolling) */
+	display: none;
+}
+
+/* When Infinite Scroll has reached its end we need to re-display elements that were hidden (via .neverending) before. */
+.infinity-end.neverending .site-footer {
+	display: block;
+}
+
+/* Styling for Infinite Scroll elements */
+#infinite-handle {
+	@include margin-two-values(1em, 0px);
+	text-align: center;
+
+	span {
+		background-color: $primary-color;
+		border-radius: 2px;
+		box-shadow: $box-shadow-small;
+		color: $white;
+	}
+
+	button {
+		box-shadow: none;
+	}
+
+}
+
+/* For Jetpack Infinite Scroll- Recreate CSS for .mx-grid.css */
+.infinite-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
