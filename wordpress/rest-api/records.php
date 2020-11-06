@@ -14,6 +14,10 @@ add_filter( 'rest_authentication_errors', function( $result ){
 	return $result;
 });
 
-require('env.php');
+define('DETECTOR_HOST', getenv('BackEnd_URL')); 
+define('DETECTOR_PORT', getenv('BackEnd_PORT')); 
+define('DETECTOR_API_USER', getenv('BackEnd_API_USER')); 
+define('DETECTOR_API_PASSWORD', getenv('BackEnd_API_PASSWORD')); 
+
 require('posts.php');
 require('fn.php');

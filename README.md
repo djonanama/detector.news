@@ -24,3 +24,7 @@ yarn lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
+### перезапуск сервера при изменении
+nodemon --exec 'vue-cli-service serve'
+
+

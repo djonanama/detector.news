@@ -1,68 +1,36 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const morgan = require("morgan");
-const path = require("path");
-const history = require("connect-history-api-fallback");
+import { resolve } from "path";
+import history from "connect-history-api-fallback";
+import express from "express";
+import morgan from "morgan";
+import connectDb from "./connectDB.mjs";
+import { configureAPI } from "./configure.mjs";
+const PORT = process.env.BackEnd_PORT || 3000;
+const HOST = process.env.BackEnd_HOST || "localhost";
 
-// const fs = require("fs");
 const app = express();
-const port = process.env.PORT || 3000;
-
-app.set("port", port);
-
-mongoose
-  .connect("mongodb://detector-user:iZYWj3WL@database-mongodb:27017/detector", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-    //  useFindAndModify: false
-  })
-  // .useDb("detector")
-  .then(db => console.log("[OK] " + db + " is connected!!!"))
-  .catch(err => console.error(err));
-
-app.use((req, res, next) => {
-  res.append("Access-Control-Allow-Origin", ["*"]);
-  res.append("Access-Control-Allow-Methods", "GET,PUT,POST,OPTIONS,DELETE");
-  res.append("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "*");
-  next();
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
-app.use("/api/records", require("./routes/records"));
+// API
+configureAPI(app);
 
-app.use("/api/sync-wp", require("./routes/sync-wp"));
+// UI
+const publicPath = resolve("./dist");
+const staticConf = { maxAge: "1y", etag: false };
 
-app.use("/api/Categories", require("./routes/categories"));
+app.use(express.static(publicPath, staticConf));
+app.use("/", history());
 
-app.use("/api/post", require("./routes/post"));
+const startServer = () => {
+  app.listen(PORT, () => {
+    console.log(
+      `[OK] DataBase connect and server is running on ${HOST}:${PORT}`
+    );
+  });
+};
 
-app.use("/api/posts", require("./routes/posts"));
-
-app.use("/api/search", require("./routes/search"));
-
-app.use("/api/nav", require("./routes/nav"));
-
-app.use("/api/human", require("./routes/human"));
-
-app.use("/api/region", require("./routes/region"));
-
-app.use("/api/truth", require("./routes/truth"));
-
-app.use("/api/theme", require("./routes/theme"));
-
-app.use("/api/tag", require("./routes/tag"));
-
-app.use("/uploads", express.static(path.join(__dirname, "./upload_media")));
-
-app.use(history());
-
-app.use("/", express.static(path.join(__dirname, "../dist")));
-
-app.listen(app.get("port"), () => {
-  console.log(`[OK] Server is running on localhost:${app.get("port")}`);
-});
+connectDb(0)
+  .on("error", console.log)
+  .on("disconnected", () => connectDb(100))
+  .once("open", startServer);

@@ -1,11 +1,9 @@
-.DS_Store
 node_modules
 /dist
 
-
-local env files
-.env.local
-.env.*.local
+# local env files
+.env
+.env.*
 
 # Log files
 npm-debug.log*
@@ -22,10 +20,8 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-
 mongodb/data
-# vu-pro_DownLoadLy.iR.tar.gz
-env.*
+vu-pro_DownLoadLy.iR.tar.gz
 
 wordpress/*
 /wordpress/mysql-db/db

@@ -2,15 +2,12 @@ version: '3.8'
 
 services:
     database-mongodb:
-        image: mongo:4.4.1
-        container_name: mongodb-database
+        image: mongo:latest
         hostname: mongodb
-        restart: always
-        volumes:
-            - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
-            - ./mongodb/data/db/:/data/db/
+        container_name: database-mongodb
+        restart: always 
         env_file:
-            - .env
+            - .env.[docker]
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -18,12 +15,15 @@ services:
             MONGO_INITDB_USERNAME: ${MONGO_INITDB_USERNAME}
             MONGO_INITDB_PASSWORD: ${MONGO_INITDB_PASSWORD}
             MONGO_REPLICA_SET_NAME: ${MONGO_REPLICA_SET_NAME}
+        volumes:
+            - ./mongodb/data/db/:/data/db/
+            - ./mongodb/mongodb_config:/data/configdb
         ports:
             - "27017:27017"
+        command: mongod --replSet rs0 --oplogSize 10
         networks:
-            - mevn-app-network
-        command: --auth
-
+            - bknet
+            - esnet
 
     backend-node:
         image: "node:12.19.0"
@@ -31,22 +31,87 @@ services:
             - database-mongodb
         working_dir: /home/node/app
         container_name: node-backend
-        restart: always
+        restart: always 
+        # unless-stopped
+        env_file:
+            - .env.[docker]
         # environment:
         # - NODE_ENV=production
         volumes:
             - ./dist/:/home/node/app/dist
             - ./node_modules/:/home/node/app/node_modules
             - ./server/:/home/node/app/server
-            - ./babel.config.js:/home/node/app/babel.config.js
-            - ./now.json:/home/node/app/now.json
             - ./package.json:/home/node/app/package.json
-            - ./vue.config.js:/home/node/app/vue.config.js
+            - ./wordpress/html/wp-content/uploads:/home/node/app/server/upload_media
         ports:
             - "3000:3000"
+        links:
+            - elasticsearch
         networks:
-            - mevn-app-network
-        command: "yarn run ser"
+            - bknet
+            - esnet
+            - webnet
+        command: "yarn run start-container"
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+        container_name: elasticsearch
+        restart: always 
+        env_file:
+            - .env.[docker]
+        depends_on:
+            - database-mongodb
+        environment:
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - ./elastic:/usr/share/elasticsearch/data
+            - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        command: elasticsearch -Enetwork.host=_local_,_site_ -Enetwork.publish_host=_local_
+        # healthcheck:
+        #     test: "wget -q -O - http://localhost:9200/_cat/health?v"
+        #     interval: 1s
+        #     timeout: 30s
+        #     retries: 300
+        ports:
+            - 9200:9200
+        expose:
+            - "9200"
+        networks:
+            - esnet
+            - webnet
+
+    monstache:
+        image: rwynn/monstache:rel6
+        expose:
+            - "8080"
+        ports:
+            - "8080:8080"
+        container_name: monstache
+        restart: always 
+        env_file:
+            - .env.[docker]
+        environment:
+            - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongodb:27017/?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME}
+            - MONSTACHE_ES_URLS=http://elasticsearch:9200
+            - MONSTACHE_DIRECT_READ_NS=detector.Post,detector.Page
+        links:
+            - elasticsearch
+            - database-mongodb
+        depends_on:
+            - database-mongodb
+            - elasticsearch
+            # database-mongodb:
+            #     condition: service_started
+            # elasticsearch:
+            #     condition: service_healthy
+        networks:
+            - esnet
+
 
 
     database-wp:
@@ -55,55 +120,59 @@ services:
         depends_on:
             - backend-node
         restart: always
-        env_file: .env
+        env_file: 
+            - .env.[docker]
         environment:
             - MYSQL_DATABASE=wordpress
         command: ['--default-authentication-plugin=mysql_native_password','--lower_case_table_names=1']
         volumes:
+            # - ./wordpress/mysql-db/cfg/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql # Edit host URL Site
             - ./wordpress/mysql-db/db:/var/lib/mysql
         networks:
-            - mevn-app-network
+            - wpnet
     
     wordpress-cms:
         depends_on:
             - database-wp
         image: wordpress:5.5.1-fpm-alpine
         container_name: cms-wordpress
-        restart: always
-        env_file: .env
-        ports:
-            - "9000:9000"
+        restart: always 
+        env_file:
+            - .env.[docker]
         environment:
             - WORDPRESS_DB_HOST=database-wp:3306
             - WORDPRESS_DB_USER=$MYSQL_USER
             - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
             - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_CONFIG_EXTRA=DEFINE('WP_HOME','HTTP://localhost/cms-admin-detector');DEFINE('WP_SITEURL','HTTP://localhost/cms-admin-detector');
-            # - WORDPRESS_CONFIG_EXTRA:define('WP_HOME','HTTP://localhost/cms-admin-detector');define('WP_SITEURL','HTTP://localhost/cms-admin-detector');
         volumes:
+            - ./wordpress/mysql-db/cfg/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
         networks:
-            - mevn-app-network
-
+            - wpnet
+            - webnet
 
     webserver-detector:
         image: nginx:1.15.12-alpine
         depends_on:
             - backend-node
             - wordpress-cms
+            # - elasticsearch
         container_name: webserver
-        restart: always
+        restart: always 
+        env_file:
+            - .env.[docker]
         ports:
             - "80:80"
             - "443:443"
+            - "4000:4000"
         volumes:
             - ./dist:/var/www/html/mevn-app
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./nginx/nginx-conf:/etc/nginx/conf.d
             - certbot-etc-mevn:/etc/letsencrypt
         networks:
-            - mevn-app-network
+            - webnet
 
     # certbot:
     #     depends_on:
@@ -119,7 +188,14 @@ services:
 
 volumes:
     certbot-etc-mevn:
+    media-load:
 
 networks:
-    mevn-app-network:
+    bknet:
+        driver: bridge
+    wpnet:
+        driver: bridge
+    webnet:
+        driver: bridge
+    esnet:
         driver: bridge

@@ -1,6 +1,9 @@
+const configureAPI = require("./server/server.js");
+
 module.exports = {
   devServer: {
-    disableHostCheck: true
+    disableHostCheck: true,
+    before: configureAPI
   },
   pwa: {
     name: "Detector",

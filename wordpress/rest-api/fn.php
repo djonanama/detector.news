@@ -16,7 +16,7 @@
 // https://codex.wordpress.org/Post_Status_Transitions
 
 function queryPostMEVN($ID, $status, $type){
-  $result = "msg_post_servis";
+  $result = ["msg_post_servis"];
 
   $args = array(
       'method' => 'POST',
@@ -27,19 +27,21 @@ function queryPostMEVN($ID, $status, $type){
   $args["body"] = array('status'=>$status,'type'=>$type);
 
   try {
-    $result = wp_remote_request( DETECTOR_HOST.":".DETECTOR_POST."/api/sync-wp/".$ID,$args);//$post->ID
+    $result = wp_remote_request( DETECTOR_HOST.":".DETECTOR_PORT."/api/sync-wp/".$ID,$args);//$post->ID
   } catch (Exception $e) {
     error_log( print_r( $result, true ) );
   }
- 
- 
+
 }
 
+add_action( 'profile_update', 'my_profile_update', 10, 2 );
+ 
+function my_profile_update( $user_id, $old_user_data ) {
+  queryPostMEVN($user_id, 'publish', 'author');
+}
 
 function msg_post_servis( $new_status, $old_status, $post )
-{
-    
-
+{   
     if( 'post' === $post->post_type )
     {
         queryPostMEVN($post->ID, $new_status, 'post');
@@ -49,24 +51,7 @@ function msg_post_servis( $new_status, $old_status, $post )
     {
         queryPostMEVN($post->ID, $new_status, 'page');
     }
-
-
-    // if( 'publish' !== $new_status || 'publish' === $old_status )
-    // {
-    //     $args["body"] = array('status'=>$new_status,'type'=>'update');
-        
-    // }
-
-    // if( 'publish' === $new_status || 'publish' !== $old_status )
-    // {
-    //     $args["body"] = array('status'=>$new_status,'type'=>'update');
-    // }
-
-    // $result = wp_remote_request( DETECTOR_HOST.":".DETECTOR_POST."/api\/".$rest_api."/u",$args);
-
-    // return;
-    //error_log( print_r( $result, true ) );
-    // do something awesome
+    // error_log( print_r( $post, true ) );
 }
 
 add_action( 'transition_post_status', 'msg_post_servis', 10, 3 );
@@ -82,3 +67,4 @@ function api_del_term( $term_id, $tt_id, $taxonomy ){
 add_action( 'created_term', 'api_create_update_term', 10, 3 );
 add_action( 'edited_term',  'api_create_update_term', 10, 3 );
 add_action( 'delete_term',  'api_del_term', 10, 5 );
+

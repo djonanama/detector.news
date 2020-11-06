@@ -77,4 +77,17 @@ export default {
     }
   }
 };
+
+// /* @import "./style/style.css";
+// @import "./style/layout.css"; */
+// /* @import "./style/style-image.css"; */
+// /* @import "./style/style-img.css"; */
 </script>
+
+<style>
+img {
+  height: auto;
+  max-width: 100%;
+  position: relative;
+}
+</style>

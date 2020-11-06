@@ -33,9 +33,9 @@
 
 // DEFINE ( 'WP_SITEURL', 'HTTP://wordpress-cms/cms-admin-detector');
 
-// DEFINE ( 'WP_HOME', 'HTTP://localhost123');
+DEFINE ( 'WP_HOME', getenv('WP_HOME'));
 
-// DEFINE ( 'WP_SITEURL', 'HTTP://localhost123');
+DEFINE ( 'WP_SITEURL', getenv('WP_SITEURL'));
 
 
 define( 'DB_NAME', 'wordpress');
@@ -75,7 +75,7 @@ define( 'NONCE_SALT',       'eb17a460c87d021d5fb608bc0ecb0be5f4d4dfd4');
 
 //Enable error logging.
 @ini_set('log_errors', 'On');
-@ini_set('error_log', '/var/www/html/wp-content/elm-error-logs/php-errors.log');
+@ini_set('error_log', '/var/www/html/cms-admin-detector/wp-content/elm-error-logs/php-errors.log');
 
 //Don't show errors to site visitors.
 @ini_set('display_errors', 'Off');

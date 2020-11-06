@@ -1,0 +1,166 @@
+version: '3.8'
+
+services:
+    database-mongodb:
+        image: mongo:4.4.1
+        hostname: mongodb
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                constraints: [node.labels.nodename == database-mongodb]
+        volumes:
+            - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+            - ./mongodb/data/db/:/data/db/
+        env_file:
+            - .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+            MONGO_INITDB_USERNAME: ${MONGO_INITDB_USERNAME}
+            MONGO_INITDB_PASSWORD: ${MONGO_INITDB_PASSWORD}
+            MONGO_REPLICA_SET_NAME: ${MONGO_REPLICA_SET_NAME}
+        ports:
+            - "27017:27017"
+        networks:
+            - net-services
+        command: --auth
+
+    backend-node:
+        image: "node:12.19.0"
+        working_dir: /home/node/app
+        deploy:
+            mode: replicated
+            replicas: 1
+            update-parallelism: 1
+            update-delay: 10s
+            stop-grace-period: 5s 
+            restart-condition: "any" 
+            restart-max-attempts: 10  
+            health-interval: 3s 
+            health-retries: 5 
+            health-timeout: 2s 
+            placement:
+                constraints: [node.labels.nodename == backend-node]
+        # environment:
+        # - NODE_ENV=production
+        volumes:
+            - ./dist/:/home/node/app/dist
+            - ./node_modules/:/home/node/app/node_modules
+            - ./server/:/home/node/app/server
+            - ./package.json:/home/node/app/package.json
+            - ./wordpress/html/wp-content/uploads:/home/node/app/server/upload_media
+        ports:
+            - "3000:3000"
+        networks:
+            - net-services
+        command: "yarn run ser"
+
+    database-wp:
+        image: mysql:8.0.21
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                constraints: [node.labels.nodename == database-wp]
+        env_file: .env
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_DATABASE=wordpress
+        command: ['--default-authentication-plugin=mysql_native_password','--lower_case_table_names=1']
+        volumes:
+            # - ./wordpress/mysql-db/cfg/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql # Edit host URL Site
+            - ./wordpress/mysql-db/db:/var/lib/mysql
+        networks:
+            - net-services
+    
+    wordpress-cms:
+        depends_on:
+            - database-wp
+        image: wordpress:5.5.1-fpm-alpine
+        deploy:
+            mode: replicated
+            replicas: 1
+            update-parallelism: 1
+            update-delay: 10s
+            stop-grace-period: 5s 
+            restart-condition: "any" 
+            restart-max-attempts: 10  
+            health-interval: 3s 
+            health-retries: 5 
+            health-timeout: 2s 
+            placement:
+                constraints: [node.labels.nodename == wordpress-cms]
+        env_file: .env
+        ports:
+            - "9000:9000"
+        environment:
+            - WORDPRESS_DB_HOST=database-wp:3306
+            - WORDPRESS_DB_USER=$MYSQL_USER
+            - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+            - WORDPRESS_DB_NAME=wordpress
+            # - WORDPRESS_CONFIG_EXTRA=DEFINE('DB_COLLATE','');DEFINE('FS_METHOD', 'direct');DEFINE('WP_HOME','https://www.cms.detector.news');DEFINE('WP_SITEURL','https://www.cms.detector.news');
+        volumes:
+            - ./wordpress/html:/var/www/html/cms-admin-detector
+            - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
+            - ./letsencrypt:/etc/letsencrypt
+        networks:
+            - net-services
+
+    webserver-detector:
+        image: nginx:1.15.12-alpine
+        deploy:
+            mode: replicated
+            replicas: 1
+            update-parallelism: 1
+            update-delay: 10s
+            stop-grace-period: 5s 
+            restart-condition: "any" 
+            restart-max-attempts: 10  
+            health-interval: 3s 
+            health-retries: 5 
+            health-timeout: 2s 
+            placement:
+                constraints: [node.labels.nodename == webserver-detector]
+        ports:
+            - "80:80"
+            - "443:443"
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+        volumes:
+            - ./dist:/var/www/html/mevn-app
+            - ./wordpress/html:/var/www/html/cms-admin-detector
+            - ./nginx/nginx-conf:/etc/nginx/conf.d
+            - ./letsencrypt:/etc/letsencrypt
+        networks:
+            - net-services
+
+    certbot:
+        depends_on:
+            - webserver-detector
+        image: certbot/certbot
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                constraints: [node.labels.nodename == certbot]
+        volumes:
+            - ./letsencrypt:/etc/letsencrypt
+            - ./dist:/var/www/html/mevn-app
+            - ./wordpress/html:/var/www/html/cms-admin-detector
+            - ./log/letsencrypt:/var/log/letsencrypt
+        command: certonly --email mihail.parfenyuk@gmail.com --agree-tos --no-eff-email --webroot -w /var/www/html/mevn-app -d detector.news -d www.detector.news -w /var/www/html/cms-admin-detector -d cms.detector.news -d www.cms.detector.news
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        networks:
+            - net-services
+        # --staging
+
+# volumes:
+#     certbot-app:
+#         external: true
+    # certbot-etc-mevn:
+
+networks:
+    net-services:
+        driver: overlay

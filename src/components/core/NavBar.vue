@@ -84,10 +84,11 @@
 <style lang="stylus">
 .navbar-brand {
   position: absolute;
-  width: 67%;
+  width: 99.4%;
   text-align: center;
-  margin-left: 15%;
+  margin-left: 0%;
   top: 15%;
+  order: unset;
 }
 </style>
 

@@ -1,6 +1,33 @@
 <?php
 
 
+function acf_field($param) {
+    $res = array();
+
+    foreach(acf_get_field_groups() as $groups) {
+        if($groups["title"] == "Детектор"){
+            foreach(acf_get_fields($groups["key"]) as $fields ){
+                if($fields["name"] == "truth"){
+                    $res = $fields["choices"];
+                }
+            }
+        }
+    }
+
+
+    return $res;
+}
+    
+add_action('rest_api_init', function() {
+    register_rest_route( 'acf_field/v1', '/truth', array(
+        'methods' => 'GET',
+        'callback' => 'acf_field',
+        'permission_callback' => function ($request) {
+            return true;
+        },
+    ));
+});
+
 // function  markers_endpoint( $request_data ) {
 
 //     $args = array(
@@ -65,7 +92,11 @@ function register_rest_images(){
 function get_rest_featured_image( $object, $field_name, $request ) {
     if( $object['featured_media'] ){
         $img = wp_get_attachment_image_src( $object['featured_media'], 'app-thumb' );
-        return $img[0];
+        if ($img){
+            return $img[0];  
+        }else{
+            return "";
+        }
     }else{
         return "";
     }
@@ -92,3 +123,13 @@ function get_rest_acf( $object, $field_name, $request ) {
         return 0;
     }
 }
+
+
+add_filter( 'rest_prepare_user', function( $response, $user, $request ) {
+
+    $response->data[ 'first_name' ] = get_user_meta( $user->ID, 'first_name', true );
+    $response->data[ 'last_name' ] = get_user_meta( $user->ID, 'last_name', true );
+
+    return $response;
+
+}, 10, 3 );
