@@ -20,8 +20,11 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+*svu-pro_DownLoadLy.*
+
+
 mongodb/data
-vu-pro_DownLoadLy.iR.tar.gz
+
 
 wordpress/*
 /wordpress/mysql-db/db
