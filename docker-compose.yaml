@@ -10,10 +10,11 @@ services:
             placement:
                 constraints: [node.labels.nodename == database-mongodb]
         volumes:
-            - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+            # - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+            - ./mongodb/mongodb_config:/data/configdb
             - ./mongodb/data/db/:/data/db/
         env_file:
-            - .env
+            - .env.[PROD]
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -24,8 +25,9 @@ services:
         ports:
             - "27017:27017"
         networks:
-            - net-services
-        command: --auth
+            - bknet
+            - esnet
+        command: mongod --replSet rs0 --oplogSize 10
 
     backend-node:
         image: "node:12.19.0"
@@ -33,16 +35,10 @@ services:
         deploy:
             mode: replicated
             replicas: 1
-            update-parallelism: 1
-            update-delay: 10s
-            stop-grace-period: 5s 
-            restart-condition: "any" 
-            restart-max-attempts: 10  
-            health-interval: 3s 
-            health-retries: 5 
-            health-timeout: 2s 
             placement:
                 constraints: [node.labels.nodename == backend-node]
+        env_file:
+            - .env.[PROD]
         # environment:
         # - NODE_ENV=production
         volumes:
@@ -53,10 +49,71 @@ services:
             - ./wordpress/html/wp-content/uploads:/home/node/app/server/upload_media
         ports:
             - "3000:3000"
+        links:
+            - elasticsearch
         networks:
-            - net-services
-        command: "yarn run ser"
+            - bknet
+            - esnet
+            - webnet
+        command: "yarn run start-container"
 
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                constraints: [node.labels.nodename == elasticsearch]
+        env_file:
+            - .env.[PROD]
+        depends_on:
+            - database-mongodb
+        environment:
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - ./elastic:/usr/share/elasticsearch/data
+            - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        command: elasticsearch -Enetwork.host=_local_,_site_ -Enetwork.publish_host=_local_
+        ports:
+            - 9200:9200
+        expose:
+            - "9200"
+        networks:
+            - esnet
+            - webnet
+    
+    monstache:
+        image: rwynn/monstache:rel6
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                constraints: [node.labels.nodename == elasticsearch]
+        expose:
+            - "8080"
+        ports:
+            - "8080:8080"
+        container_name: monstache
+        env_file:
+            - .env.[PROD]
+        environment:
+            - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongodb:27017/?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME}
+            - MONSTACHE_ES_URLS=http://elasticsearch:9200
+            - MONSTACHE_DIRECT_READ_NS=detector.Post,detector.Page
+        links:
+            - elasticsearch
+            - database-mongodb
+        depends_on:
+            - database-mongodb
+            - elasticsearch
+        networks:
+            - esnet
+            
     database-wp:
         image: mysql:8.0.21
         deploy:
@@ -64,7 +121,8 @@ services:
             replicas: 1
             placement:
                 constraints: [node.labels.nodename == database-wp]
-        env_file: .env
+        env_file: 
+            - .env.[PROD]
         ports:
             - "3306:3306"
         environment:
@@ -74,7 +132,7 @@ services:
             # - ./wordpress/mysql-db/cfg/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql # Edit host URL Site
             - ./wordpress/mysql-db/db:/var/lib/mysql
         networks:
-            - net-services
+            - wpnet
     
     wordpress-cms:
         depends_on:
@@ -83,17 +141,10 @@ services:
         deploy:
             mode: replicated
             replicas: 1
-            update-parallelism: 1
-            update-delay: 10s
-            stop-grace-period: 5s 
-            restart-condition: "any" 
-            restart-max-attempts: 10  
-            health-interval: 3s 
-            health-retries: 5 
-            health-timeout: 2s 
             placement:
                 constraints: [node.labels.nodename == wordpress-cms]
-        env_file: .env
+        env_file: 
+            - .env.[PROD]
         ports:
             - "9000:9000"
         environment:
@@ -107,26 +158,22 @@ services:
             - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
             - ./letsencrypt:/etc/letsencrypt
         networks:
-            - net-services
+            - wpnet
+            - webnet
 
     webserver-detector:
         image: nginx:1.15.12-alpine
         deploy:
             mode: replicated
             replicas: 1
-            update-parallelism: 1
-            update-delay: 10s
-            stop-grace-period: 5s 
-            restart-condition: "any" 
-            restart-max-attempts: 10  
-            health-interval: 3s 
-            health-retries: 5 
-            health-timeout: 2s 
             placement:
                 constraints: [node.labels.nodename == webserver-detector]
+        env_file:
+            - .env.[PROD]
         ports:
             - "80:80"
             - "443:443"
+            - "4000:4000"
         command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
         volumes:
             - ./dist:/var/www/html/mevn-app
@@ -134,7 +181,7 @@ services:
             - ./nginx/nginx-conf:/etc/nginx/conf.d
             - ./letsencrypt:/etc/letsencrypt
         networks:
-            - net-services
+            - webnet
 
     certbot:
         depends_on:
@@ -145,6 +192,8 @@ services:
             replicas: 1
             placement:
                 constraints: [node.labels.nodename == certbot]
+        env_file:
+            - .env.[docker]
         volumes:
             - ./letsencrypt:/etc/letsencrypt
             - ./dist:/var/www/html/mevn-app
@@ -156,11 +205,14 @@ services:
             - net-services
         # --staging
 
-# volumes:
-#     certbot-app:
-#         external: true
-    # certbot-etc-mevn:
-
 networks:
-    net-services:
+    bknet:
         driver: overlay
+    wpnet:
+        driver: overlay
+    webnet:
+        driver: overlay
+    esnet:
+        driver: overlay
+    # net-services:
+    #     driver: overlay

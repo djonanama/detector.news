@@ -112,8 +112,6 @@ services:
         networks:
             - esnet
 
-
-
     database-wp:
         image: mysql:8.0.21
         container_name: wp-database
@@ -188,7 +186,6 @@ services:
 
 volumes:
     certbot-etc-mevn:
-    media-load:
 
 networks:
     bknet:

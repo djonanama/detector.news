@@ -27,12 +27,12 @@
 import { mdbChip } from "mdbvue";
 export default {
   name: "Home",
-  data() {
-    return {
-      imageURL: require("@/assets/logo.png"),
-      publicPath: process.env.BASE_URL
-    };
-  },
+  // data() {
+  //   return {
+  //     imageURL: require("@/assets/logo.png"),
+  //     publicPath: process.env.BASE_URL
+  //   };
+  // },
   components: {
     mdbChip
     // About: () => import('@/components/home/About'),
