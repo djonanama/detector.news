@@ -178,7 +178,7 @@ services:
         volumes:
             - ./dist:/var/www/html/mevn-app
             - ./wordpress/html:/var/www/html/cms-admin-detector
-            - ./nginx/nginx-conf:/etc/nginx/conf.d
+            - ./nginx/nginx-conf-prod:/etc/nginx/conf.d
             - ./letsencrypt:/etc/letsencrypt
         networks:
             - webnet
