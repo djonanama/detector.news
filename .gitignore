@@ -6,7 +6,7 @@ letsencrypt
 # build static app
 /dist
 
-/elastic
+/elastic/data
 
 # Editor directories and files
 .idea
@@ -28,13 +28,15 @@ vu-pro_DownLoadLy.iR.tar.gz
 mongodb/data
 
 # WP
-wordpress/*
-/wordpress/mysql-db/db
-!/wordpress
-!/wordpress/html/
-!/wordpress/rest-api/
-!/wordpress/mysql-db
-!/wordpress/mysql-db/cfg
+/wordpress/html
+
+
+# /wordpress/mysql-db/db
+# !/wordpress
+# !/wordpress/html/
+# !/wordpress/rest-api/
+# !/wordpress/mysql-db
+# !/wordpress/mysql-db/cfg
 
 
 # Logs

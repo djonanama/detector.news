@@ -69,7 +69,7 @@ services:
                 soft: -1
                 hard: -1
         volumes:
-            - ./elastic:/usr/share/elasticsearch/data
+            - ./elastic/data:/usr/share/elasticsearch/data
             - ./elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
         command: elasticsearch -Enetwork.host=_local_,_site_ -Enetwork.publish_host=_local_
         # healthcheck:
