@@ -1,7 +1,7 @@
 .dockerignore
 .gitignore
 letsencrypt
-
+#q
 
 # build static app
 /dist
@@ -28,15 +28,13 @@ vu-pro_DownLoadLy.iR.tar.gz
 mongodb/data
 
 # WP
-/wordpress/html
-
-
-# /wordpress/mysql-db/db
-# !/wordpress
-# !/wordpress/html/
-# !/wordpress/rest-api/
-# !/wordpress/mysql-db
-# !/wordpress/mysql-db/cfg
+wordpress
+/wordpress/mysql-db/db
+!/wordpress
+!/wordpress/html/
+!/wordpress/rest-api/
+!/wordpress/mysql-db
+!/wordpress/mysql-db/cfg
 
 
 # Logs
