@@ -2,8 +2,11 @@
 .gitignore
 letsencrypt
 
+
 # build static app
 /dist
+
+/elastic
 
 # Editor directories and files
 .idea
