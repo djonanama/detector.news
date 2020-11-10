@@ -203,7 +203,8 @@ services:
         command: certonly --email mihail.parfenyuk@gmail.com --agree-tos --no-eff-email --webroot -w /var/www/html/mevn-app -d detector.news -d www.detector.news -w /var/www/html/cms-admin-detector -d cms.detector.news -d www.cms.detector.news
         entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
         networks:
-            - net-services
+            - webnet
+            - bknet
         # --staging
 
 networks:
