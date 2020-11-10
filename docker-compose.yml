@@ -1,5 +1,5 @@
 version: '3.8'
-# qqq hooks
+# qqq hooks w
 services:
     database-mongodb:
         image: mongo:latest
