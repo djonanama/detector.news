@@ -1,2 +1,0 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-$environment_variable = '{"theme":{"folder_name":"twentynineteen","mapped_name":""},"allowed_paths":["\/var\/www\/html\/wp-content\/themes"],"cache_path":"\/var\/www\/html\/wp-content\/cache\/wph\/","wordpress_directory":"","site_relative_path":"\/"}'; ?>
