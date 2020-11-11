@@ -96,7 +96,7 @@ services:
         env_file:
             - .env.[docker]
         environment:
-            - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongodb:27017/?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME}
+            - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_USERNAME}:${MONGO_INITDB_PASSWORD}@database-mongodb:27017/detector #?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME} #&authMechanism=SCRAM-SHA-256
             - MONSTACHE_ES_URLS=http://elasticsearch:9200
             - MONSTACHE_DIRECT_READ_NS=detector.Post,detector.Page
         links:
