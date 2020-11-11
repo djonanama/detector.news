@@ -4,6 +4,9 @@ import express from "express";
 import morgan from "morgan";
 import connectDb from "./connectDB.mjs";
 import { configureAPI } from "./configure.mjs";
+
+import fs from "fs";
+
 const PORT = process.env.BackEnd_PORT || 3000;
 const HOST = process.env.BackEnd_HOST || "localhost";
 
@@ -16,11 +19,22 @@ app.use(morgan("dev"));
 configureAPI(app);
 
 // UI
-const publicPath = resolve("./dist");
-const staticConf = { maxAge: "1y", etag: false };
 
-app.use(express.static(publicPath, staticConf));
-app.use("/", history());
+try {
+  let publicPath;
+  if (fs.existsSync("./dist/index.html")) {
+    publicPath = resolve("./dist");
+  } else {
+    publicPath = resolve("./green");
+  }
+
+  const staticConf = { maxAge: "1y", etag: false };
+
+  app.use(express.static(publicPath, staticConf));
+  app.use("/", history());
+} catch (err) {
+  console.error(err);
+}
 
 const startServer = () => {
   app.listen(PORT, () => {
