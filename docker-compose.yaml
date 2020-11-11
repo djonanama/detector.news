@@ -72,7 +72,7 @@ services:
             - database-mongodb
         environment:
             - bootstrap.memory_lock=true
-            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
         ulimits:
             memlock:
                 soft: -1
