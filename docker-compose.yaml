@@ -195,7 +195,7 @@ services:
             placement:
                 constraints: [node.labels.nodename == certbot]
         env_file:
-            - .env.[PROM]
+            - .env.[PROD]
         volumes:
             - ./letsencrypt:/etc/letsencrypt
             - ./dist:/var/www/html/mevn-app
