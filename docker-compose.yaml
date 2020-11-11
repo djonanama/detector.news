@@ -95,7 +95,7 @@ services:
             mode: replicated
             replicas: 1
             placement:
-                constraints: [node.labels.nodename == elasticsearch]
+                constraints: [node.labels.nodename == monstache]
         expose:
             - "8080"
         ports:
