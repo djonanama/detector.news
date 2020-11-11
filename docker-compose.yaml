@@ -134,6 +134,8 @@ services:
         volumes:
             # - ./wordpress/mysql-db/cfg/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql # Edit host URL Site
             - ./wordpress/mysql-db/db:/var/lib/mysql
+        links:
+            - wordpress-cms
         networks:
             - wpnet
     
@@ -160,6 +162,9 @@ services:
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
             - ./letsencrypt:/etc/letsencrypt
+        links:
+            - backend-node
+            - webserver-detector
         networks:
             - wpnet
             - webnet
