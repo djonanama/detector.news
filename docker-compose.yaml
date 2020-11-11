@@ -157,7 +157,7 @@ services:
             - WORDPRESS_DB_USER=$MYSQL_USER
             - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
             - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_CONFIG_EXTRA=DEFINE('DB_COLLATE','');DEFINE('FS_METHOD', 'direct');DEFINE('WP_HOME','https://cms.detector.news');DEFINE('WP_SITEURL','https://cms.detector.news');
+            # - WORDPRESS_CONFIG_EXTRA=DEFINE('DB_COLLATE','');DEFINE('FS_METHOD', 'direct');DEFINE('WP_HOME','https://cms.detector.news');DEFINE('WP_SITEURL','https://cms.detector.news');
         volumes:
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./wordpress/rest-api:/var/www/html/cms-admin-detector/rest-api
