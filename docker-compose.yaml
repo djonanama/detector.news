@@ -43,7 +43,6 @@ services:
         # - NODE_ENV=production
         volumes:
             - ./dist/:/home/node/app/dist
-            - ./green/:/home/node/app/green
             - ./node_modules/:/home/node/app/node_modules
             - ./server/:/home/node/app/server
             - ./package.json:/home/node/app/package.json

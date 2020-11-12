@@ -21,13 +21,7 @@ configureAPI(app);
 // UI
 
 try {
-  let publicPath;
-  if (fs.existsSync("./dist/index.html")) {
-    publicPath = resolve("./dist");
-  } else {
-    publicPath = resolve("./green");
-  }
-
+  const publicPath = resolve("./dist");
   const staticConf = { maxAge: "1y", etag: false };
   app.use("/", history());
   app.use(express.static(publicPath, staticConf));
