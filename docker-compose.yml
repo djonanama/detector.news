@@ -165,7 +165,7 @@ services:
             - "443:443"
             - "4000:4000"
         volumes:
-            - ./log/nginx/:/var/log/nginx
+            # - ./log/nginx/:/var/log/nginx
             - ./dist:/var/www/html/mevn-app
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./nginx/nginx-conf:/etc/nginx/conf.d

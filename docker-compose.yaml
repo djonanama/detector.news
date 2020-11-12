@@ -184,6 +184,7 @@ services:
             - "4000:4000"
         # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
         volumes:
+            - ./log/nginx/:/var/log/nginx
             - ./dist:/var/www/html/mevn-app
             - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./nginx/nginx-conf-prod:/etc/nginx/conf.d
