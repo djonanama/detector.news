@@ -1,5 +1,5 @@
 <template>
-  <div id="home">new version 1234
+  <div id="home">new version 12345
     <!-- <div> -->
     <!-- <mdb-chip src="https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg" alt="Contact Person" waves> John Doe</mdb-chip>
     <mdb-chip src="https://mdbootstrap.com/img/Photos/Avatars/avatar-10.jpg" alt="Contact Person" size="md" waves> Anna Smith</mdb-chip> -->
