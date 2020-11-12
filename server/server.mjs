@@ -21,7 +21,8 @@ configureAPI(app);
 // UI
 
 try {
-  const publicPath = resolve("./dist");
+  let publicPath;
+  publicPath = resolve("./dist");
   const staticConf = { maxAge: "1y", etag: false };
   app.use("/", history());
   app.use(express.static(publicPath, staticConf));
