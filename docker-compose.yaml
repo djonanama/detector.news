@@ -230,7 +230,7 @@ services:
             - "4001:4001"
         volumes:
             - ./nginx/nginx-conf-prod:/src/nginx/nginx-conf:ro
-            - certbot-etc-mevn:/etc/letsencrypt
+            - ./letsencrypt:/etc/letsencrypt
         command: sh /src/nginx/nginx-conf/run_nginx.sh
         networks:
             - webnet
