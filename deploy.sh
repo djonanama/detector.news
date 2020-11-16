@@ -3,6 +3,8 @@
 set -e
 set -u
 
+sudo docker stack deploy --with-registry-auth -c docker-compose.yaml detector
+
 service=detector_webserver-detector 
 cp -f -R  ".env.[PROD]" ".env"
 
