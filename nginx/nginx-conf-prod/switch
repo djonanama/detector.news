@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+export DOLLAR='$'
+export BACKEND_SERVICE=$1
+echo "|| ----------- $BACKEND_SERVICE ----------- ||"
+envsubst '${BACKEND_SERVICE},${DOLLAR}' < ./src/nginx/nginx-conf/nginx.conf.template > /etc/nginx/nginx.conf
+nginx -s reload

@@ -14,10 +14,10 @@ add_filter( 'rest_authentication_errors', function( $result ){
 	return $result;
 });
 
-define('DETECTOR_HOST', getenv('BackEnd_URL')); 
-define('DETECTOR_PORT', getenv('BackEnd_PORT')); 
-define('DETECTOR_API_USER', getenv('BackEnd_API_USER')); 
-define('DETECTOR_API_PASSWORD', getenv('BackEnd_API_PASSWORD')); 
+define('DETECTOR_HOST', getenv('WP_BackEnd_URL')); 
+define('DETECTOR_PORT', getenv('WP_BackEnd_PORT')); 
+define('DETECTOR_API_USER', getenv('WP_BackEnd_API_USER')); 
+define('DETECTOR_API_PASSWORD', getenv('WP_BackEnd_API_PASSWORD')); 
 
 require('posts.php');
 require('fn.php');
