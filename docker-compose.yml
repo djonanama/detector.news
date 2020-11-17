@@ -204,6 +204,8 @@ services:
             - "4000:4000"
             - "4001:4001"
         volumes:
+            - ./common/green/dist:/var/www/html/mevn-app
+            - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./nginx/nginx-conf:/src/nginx/nginx-conf:ro
             - certbot-etc-mevn:/etc/letsencrypt
         command: sh /src/nginx/nginx-conf/run_nginx.sh

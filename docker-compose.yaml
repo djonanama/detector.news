@@ -124,6 +124,7 @@ services:
             - "8080:8080"
         env_file:
             - .env
+            - .env.[PROD]
         environment:
             - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongodb:27017/?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME}
             # - MONSTACHE_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database-mongodb:27017/?connect=direct&replicaSet=${MONGO_REPLICA_SET_NAME}
@@ -229,6 +230,8 @@ services:
             - "4000:4000"
             - "4001:4001"
         volumes:
+            - ./common/green/dist:/var/www/html/mevn-app
+            - ./wordpress/html:/var/www/html/cms-admin-detector
             - ./nginx/nginx-conf-prod:/src/nginx/nginx-conf:ro
             - ./letsencrypt:/etc/letsencrypt
         command: sh /src/nginx/nginx-conf/run_nginx.sh
