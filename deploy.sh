@@ -21,6 +21,10 @@ docker service scale detector_backend-node-blue=0
 yarn build
 docker service scale detector_backend-node-blue=1
 
+echo "----------------------"
+echo "switch backend-node-blue"
+echo "----------------------"
+
 until curl -sS http://localhost:5002; do
   >&2 echo "backend-node-blue - sleeping"
   sleep 3s
@@ -34,6 +38,11 @@ cp -f -R  "./common/blue/dist" "./common/green/"
 
 docker service scale detector_backend-node-green=1
 
+echo "----------------------"
+echo "switch backend-node-green"
+echo "----------------------"
+
+
 until curl -sS http://localhost:5001; do
   >&2 echo "backend-node-green - sleeping"
   sleep 1s
@@ -42,3 +51,7 @@ done
 sudo docker -H $node exec $service".1."$serviceID sh -c "/src/nginx/nginx-conf/switch backend-node-green"
 
 docker service scale detector_backend-node-blue=0
+
+echo "----------------------"
+echo "Finish deploy!"
+echo "----------------------"
