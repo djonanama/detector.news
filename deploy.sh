@@ -26,7 +26,7 @@ until curl -sS http://localhost:5002; do
   sleep 3s
 done 
 
-sudo docker -H $node exec -it $service".1."$serviceID sh -c "/src/nginx/nginx-conf/switch backend-node-blue"
+sudo docker -H $node exec $service".1."$serviceID sh -c "/src/nginx/nginx-conf/switch backend-node-blue"
 
 docker service scale detector_backend-node-green=0
 rm -r "./common/green/dist" 
@@ -39,6 +39,6 @@ until curl -sS http://localhost:5001; do
   sleep 1s
 done 
 
-sudo docker -H $node exec -it $service".1."$serviceID sh -c "/src/nginx/nginx-conf/switch backend-node-green"
+sudo docker -H $node exec $service".1."$serviceID sh -c "/src/nginx/nginx-conf/switch backend-node-green"
 
 docker service scale detector_backend-node-blue=0
