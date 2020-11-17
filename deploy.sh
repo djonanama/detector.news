@@ -25,7 +25,7 @@ echo "----------------------"
 echo "switch backend-node-blue"
 echo "----------------------"
 
-until curl -sS http://localhost:5002; do
+until curl -sS -I http://localhost:5002; do
   >&2 echo "backend-node-blue - sleeping"
   sleep 3s
 done 
@@ -43,7 +43,7 @@ echo "switch backend-node-green"
 echo "----------------------"
 
 
-until curl -sS http://localhost:5001; do
+until curl -sS -I http://localhost:5001; do
   >&2 echo "backend-node-green - sleeping"
   sleep 1s
 done 
