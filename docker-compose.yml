@@ -16,6 +16,7 @@ services:
             MONGO_INITDB_PASSWORD: ${MONGO_INITDB_PASSWORD}
             MONGO_REPLICA_SET_NAME: ${MONGO_REPLICA_SET_NAME}
         volumes:
+            - ./mongodb/cfg/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
             - ./mongodb/data/db/:/data/db/
             - ./mongodb/mongodb_config:/data/configdb
         ports:

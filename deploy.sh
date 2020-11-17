@@ -4,7 +4,7 @@ set -e
 set -u
 
 cp -f -R  ".env.[PROD]" ".env"
-docker stack deploy --with-registry-auth -c docker-compose.yaml detector
+env $(cat .env | grep ^[A-Z] | xargs) docker stack deploy --with-registry-auth -c docker-compose.yaml detector
 
 service=detector_webserver-detector 
 serviceID=$(sudo docker service ps -f name=$service -f desired-state=running $service -q --no-trunc |head -n1)
