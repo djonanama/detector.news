@@ -45,7 +45,7 @@ async function getItemsFact(type, ids, p = 0, l = 10) {
 
   resData = await mPost
     .find(queryDB)
-    .populate("agent_val", "-_id -__v -modified -date -content -type_s")
+    .populate("agent_val", "-_id -__v -modified -date -content")
     .populate("truth_val", "-_id -__v")
     .skip(p * l)
     .limit(l)
@@ -68,12 +68,14 @@ router.get("/:search", async (req, res) => {
     "content"
   ]);
   const getPost = await getItemsFact("post", resPost.ids);
+
   const resPage = await Search(req.params.search, "page", ["title", "content"]);
   const getPage = await getItemsFact("page", resPage.ids);
+
   res.status(200).json({ post: [resPost, getPost], page: [resPage, getPage] });
 });
 
-router.get("/find/:type", async (req, res) => {
+router.post("/find/:type", async (req, res) => {
   const ids = req.body.ids || [0];
   const p = req.body.p || 0;
   const l = req.body.l || 10;

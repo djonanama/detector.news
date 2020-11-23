@@ -20,12 +20,16 @@ configureAPI(app);
 
 // UI
 
+app.use(
+  "/uploads",
+  express.static(resolve("/home/node/app/server/upload_media"))
+);
 try {
   let publicPath;
   publicPath = resolve("./dist");
   const staticConf = { maxAge: "1y", etag: false };
   app.use("/", history());
-  app.use(express.static(publicPath, staticConf));
+  app.use("/", express.static(publicPath, staticConf));
 } catch (err) {
   console.error(err);
 }

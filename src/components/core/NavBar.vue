@@ -5,10 +5,9 @@
     togglerIcon="search"
     dark
     hamburger
-    scrolling
     expand="xl"
   >
-    <router-link :to="{ name: 'home' }">
+    <router-link :to="{ name: 'home' }" style="z-index:-100">
       <mdb-navbar-brand
         class="text-white text-uppercase pt-0 pb-0"
         style="font-weight:600"
@@ -53,28 +52,37 @@
         </mdb-dropdown-menu>
       </mdb-dropdown>
     </mdb-navbar-nav>
-
+    <!-- navbar-collapse show-navbar  style overflow: initial; 
+    
+       navbar-collapse hide-navbar collapse overflow: initial; -->
     <mdb-navbar-toggler>
       <mdb-navbar-nav right>
-        <form class="row">
-          <mdb-input
-            v-model="search"
-            type="text"
-            class="text-white col-sm-9 mr-3"
-            placeholder="Поиск"
-            aria-label="Search"
-            label
-            navInput
-            waves
-            waves-fixed
-          />
-          <router-link
-            class="col-sm-2 ml-3 mr-3"
-            :to="{ name: 'search', params: { find: search } }"
-          >
-            <mdb-btn outline="info">Найти</mdb-btn>
-          </router-link>
-        </form>
+        <div class="row align-items-center">
+          <div class="col-10 pl-5">
+            <div class="md-form">
+              <input
+                type="text"
+                class="form-control mb-0 mt-0"
+                id="inlineFormInputMD"
+                v-model="search"
+              />
+              <label class="sr-only" for="inlineFormInputMD">Name</label>
+            </div>
+          </div>
+          <div class="col-2">
+            <router-link
+              class="col-2 mt-2"
+              :to="{ name: 'search', params: { find: search } }"
+            >
+            <button
+              class="btn btn-info mb-0"
+              @click="trigger"
+            >
+              Найти
+            </button>
+            </router-link>
+          </div>
+        </div>
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -87,7 +95,7 @@
   width: 99.4%;
   text-align: center;
   margin-left: 0%;
-  top: 15%;
+  top: 8px;
   order: unset;
 }
 </style>
@@ -96,6 +104,14 @@
 import RecursionMenuItems from "../base/RecursionMenuItems";
 import { mapGetters, mapActions } from "vuex";
 import {
+  mdbCol,
+  mdbCard,
+  mdbCardImage,
+  mdbCardBody,
+  mdbCardTitle,
+  mdbCardUp,
+  mdbView,
+  mdbMask,
   mdbBtn,
   mdbFormInline,
   mdbContainer,
@@ -116,7 +132,8 @@ export default {
   name: "CoreNavBar",
   data() {
     return {
-      search: " "
+      search: " ",
+      visiblesearch: {}
     };
   },
   computed: {
@@ -124,6 +141,14 @@ export default {
   },
   components: {
     RecursionMenuItems,
+    mdbCol,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardUp,
+    mdbView,
+    mdbMask,
     mdbBtn,
     mdbFormInline,
     mdbContainer,
@@ -141,7 +166,11 @@ export default {
     mdbDropdownItem
   },
   methods: {
-    ...mapActions(["runLoadDataMegaMenu"])
+    ...mapActions(["runLoadDataMegaMenu"]),
+    trigger() {
+      var el = this.$el.querySelector(".navbar-toggler");
+      el.click();
+    }
   },
   async mounted() {
     this.runLoadDataMegaMenu();
@@ -154,5 +183,9 @@ export default {
     z-index:1089 !important;
     max-height: 100vh !important;
     overflow-x: hidden !important;
+}
+input {
+  border-bottom: 1px solid #33b5e5 !important;color: #ced4da !important;
+  color: #ced4da !important;
 }
 </style>

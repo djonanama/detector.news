@@ -4,7 +4,7 @@ const router = express.Router();
 import PostModel from "../../models/Post.mjs";
 import percentTruth from "./utils/percentTruth.mjs";
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   const p = req.body.p || 0;
   const l = req.body.l || 42;
   const viewPerc = req.body.viewPerc || 1;
@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
   res.status(200).json({ data: resData, truth: pt });
 });
 
-router.get("/:type/:id", async (req, res) => {
+router.post("/:type/:id", async (req, res) => {
   const p = req.body.p || 0;
   const l = req.body.l || 42;
   const viewPerc = req.body.viewPerc || 1;
@@ -60,14 +60,19 @@ router.get("/:type/:id", async (req, res) => {
       queryDB = { categories: Number(req.params.id) };
       queryPT = queryDB;
       break;
-    case "mass_media": //person || media
+    case "mass_media": //person || media ?????
       queryPT = { "page.type_s.value": req.params.id };
       agent.match = { "type_s.value": req.params.id };
+      break;
+    case "person":
+    case "media":
+      queryPT = { link_source_agent_page_id: Number(req.params.id) };
+      queryDB = queryPT;
       break;
     case "truth":
       queryDB = { truth: Number(req.params.id) };
       break;
-    case "teg":
+    case "tag":
       queryDB = { tags: Number(req.params.id) };
       queryPT = queryDB;
       break;
@@ -87,7 +92,7 @@ router.get("/:type/:id", async (req, res) => {
   if (p === 0 && viewPerc === 1 && req.params.type !== "truth") {
     pt = await percentTruth(queryPT);
   }
-
+  console.log(queryDB);
   resData = await PostModel.find(queryDB)
     //.sort({ date: -1 })
     .populate(agent)
@@ -105,7 +110,7 @@ router.get("/:type/:id", async (req, res) => {
   res.status(200).json({ data: resData, truth: pt });
 });
 
-router.get("/:type/:id/truth/:tid", async (req, res) => {
+router.post("/:type/:id/truth/:tid", async (req, res) => {
   const p = req.body.p || 0;
   const l = req.body.l || 42;
   let agent = {
@@ -117,20 +122,36 @@ router.get("/:type/:id/truth/:tid", async (req, res) => {
 
   switch (req.params.type) {
     case "region":
-      queryDB = { "geo_locate.value": req.params.id, truth: req.params.tid };
+      queryDB = {
+        "geo_locate.value": req.params.id,
+        truth: Number(req.params.tid)
+      };
       break;
     case "theme":
-      queryDB = { categories: Number(req.params.id), truth: req.params.tid };
+      queryDB = {
+        categories: Number(req.params.id),
+        truth: Number(req.params.tid)
+      };
       break;
     case "mass_media": //person || media
       agent.match = { "type_s.value": req.params.id };
-      queryDB = { truth: req.params.tid };
+      queryDB = { truth: Number(req.params.tid) };
       break;
-    case "teg":
-      queryDB = { tags: Number(req.params.id), truth: req.params.tid };
+    case "person":
+    case "media":
+      queryDB = {
+        link_source_agent_page_id: Number(req.params.id),
+        truth: Number(req.params.tid)
+      };
+      break;
+    case "tag":
+      queryDB = { tags: Number(req.params.id), truth: Number(req.params.tid) };
       break;
     case "author":
-      queryDB = { author: Number(req.params.id), truth: req.params.tid };
+      queryDB = {
+        author: Number(req.params.id),
+        truth: Number(req.params.tid)
+      };
       break;
     default:
       res.status(404).json({

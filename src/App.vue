@@ -1,6 +1,7 @@
 <template>
   <div class="flexible-content">
     <CoreNavBar />
+    <!-- style="padding-top:85px" -->
     <main style="padding-top:85px">
       <CoreMainContent />
       <CoreFooter />

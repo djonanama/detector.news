@@ -1,0 +1,42 @@
+import Vue from "vue";
+import axios from "axios";
+
+// const WP_BackEnd_URL = process.env.WP_BackEnd_URL || "http://localhost";
+// const WP_BackEnd_PORT = process.env.WP_BackEnd_PORT || 4001;
+
+const WP_BackEnd_URL = "http://localhost";
+const WP_BackEnd_PORT = 5001;
+
+const client = axios.create({
+  baseURL: WP_BackEnd_URL + ":" + WP_BackEnd_PORT + "/",
+  json: true
+});
+
+export default {
+  async execute(method, resource, data) {
+    // inject the accessToken for each request
+    // let accessToken = await Vue.prototype.$auth.getAccessToken();
+    return client({
+      method,
+      url: "api" + resource,
+      data: data
+      // headers: {
+      //   // Authorization: `Bearer ${accessToken}`
+      // }
+    }).then(req => {
+      return req.data;
+    });
+  },
+  getPosts(path = "", body = { p: 0, l: 10 }) {
+    return this.execute("post", "/items" + path, body);
+  },
+  getNavBarElement(path, param = "") {
+    return this.execute("get", `${path}${param}`, {});
+  },
+  getSearch(path, param = "") {
+    return this.execute("get", `/search${path}${param}`, {});
+  },
+  getOnlyPost(id) {
+    return this.execute("get", `/item/post/${id}`, {});
+  }
+};

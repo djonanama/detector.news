@@ -6,7 +6,7 @@
   "scripts": {
     "start-container": "node --experimental-modules --no-warnings ./server/server.mjs",
     "start-container-dev": "nodemon --experimental-modules --no-warnings ./server/server.mjs",
-    "serve": "vue-cli-service serve --modern",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern --no-clean --dest ./common/blue/dist",
     "lint": "vue-cli-service lint",
     "deploy": "yarn build && now && now alias",

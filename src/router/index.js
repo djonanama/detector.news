@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(Router);
 
@@ -16,43 +15,7 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home,
-      props: true
-    },
-    {
-      path: "/region/:id",
-      name: "region",
-      component: () => import("@/views/nav/Region.vue"),
-      props: true
-    },
-    {
-      path: "/theme/:id",
-      name: "theme",
-      component: () => import("@/views/nav/Theme.vue"),
-      props: true
-    },
-    {
-      path: "/human/:id",
-      name: "human",
-      component: () => import("@/views/nav/Human.vue"),
-      props: true
-    },
-    {
-      path: "/media/:id",
-      name: "media",
-      component: () => import("@/views/nav/Media.vue"),
-      props: true
-    },
-    {
-      path: "/truth/:id",
-      name: "truth",
-      component: () => import("@/views/nav/Truth.vue"),
-      props: true
-    },
-    {
-      path: "/post/:id",
-      name: "staticpost",
-      component: () => import("@/views/StaticPost.vue"),
+      component: () => import("@/views/Home.vue"),
       props: true
     },
     {
@@ -71,6 +34,24 @@ export default new Router({
       path: "/factcheck",
       name: "factcheck",
       component: () => import("@/views/Factcheck.vue")
+    },
+    {
+      path: "/post/:id",
+      name: "onlypost",
+      component: () => import("@/views/OnlyPost.vue"),
+      props: true
+    },
+    {
+      path: "/:type/:id",
+      name: "posts",
+      component: () => import("@/views/Posts.vue"),
+      props: true
+    },
+    {
+      path: "/:type/:id/truth/:tid",
+      name: "posts_truth",
+      component: () => import("@/views/PostsTruth.vue"),
+      props: true
     }
   ]
 });

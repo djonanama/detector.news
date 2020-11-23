@@ -42,28 +42,16 @@ const percentTruth = async function(matchParam) {
         _id: 0,
         truth_id: "$_id.truth",
         percentage: {
-          $concat: [
+          $multiply: [
             {
-              $substr: [
+              $trunc: [
                 {
-                  $multiply: [
-                    {
-                      $trunc: [
-                        {
-                          $divide: ["$count", "$_id.total"]
-                        },
-                        2
-                      ]
-                    },
-                    100.0
-                  ]
+                  $divide: ["$count", "$_id.total"]
                 },
-                0,
-                4
+                2
               ]
             },
-            "",
-            "%"
+            100.0
           ]
         }
       }
@@ -77,7 +65,7 @@ const percentTruth = async function(matchParam) {
   for (var i = 0; i < usersTruth.length; i++) {
     let obj = trcnt.filter(d => {
       return d.truth_id == usersTruth[i].truth_id;
-    })[0] || { percentage: "0%" };
+    })[0] || { percentage: 0 };
     usersTruth[i].percentage = obj.percentage;
   }
   return usersTruth;

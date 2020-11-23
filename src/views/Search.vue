@@ -1,34 +1,53 @@
 <template>
-  <mdb-container v-if="Object.keys(getSearch).length > 0">
-    <mdb-row class="text-center">
+  <div id="home row" v-if="Object.keys(getSearch).length > 0">
+    <h2 class="col">
+      Результат поиcка: <i class="blue-text">"{{ find }}"</i>
+    </h2>
+
+    <mdb-row class="text-center col">
       <mdb-col sm="2" />
       <mdb-col sm="4">
         <mdb-btn flat size="lg" darkWaves style="width:280px" disabled>
-          <h2>{{ getSearch.pages.count }}</h2>
+          <h2>{{ getSearch.page[1].count }}</h2>
           <mdb-card-title><ins>Люди и Медиа</ins></mdb-card-title>
         </mdb-btn>
       </mdb-col>
       <mdb-col sm="4">
         <mdb-btn flat size="lg" darkWaves style="width:280px" disabled>
-          <h2>{{ getSearch.posts.count }}</h2>
+          <h2>{{ getSearch.post[1].count }}</h2>
           <mdb-card-title><ins>Статьи</ins></mdb-card-title>
         </mdb-btn>
       </mdb-col>
       <mdb-col sm="2" />
     </mdb-row>
-    <WireitemPM v-bind:wirePM="getSearch.pages.data" />
-
-    <Wireitem
-      v-for="(item, index) in getSearch.posts.data.post"
-      :key="index"
-      v-bind:wire="item"
-    />
-  </mdb-container>
+    <hr />
+    <h2 class="col">
+      Люди и Медиа
+    </h2>
+    <AvatarPage v-bind:wirePM="getSearch.page[1].data" />
+    <hr />
+    <h2 class="col">
+      Статьи
+    </h2>
+    <mdb-row class="row mr-0 ml-0 col">
+      <mdb-col
+        col="12"
+        sm="12"
+        md="12"
+        lg="12"
+        xl="6"
+        v-for="(item, index) in getSearch.post[1].data"
+        :key="index"
+      >
+        <ItemFact v-bind:wire="item" v-bind:islink="true" />
+      </mdb-col>
+    </mdb-row>
+  </div>
 </template>
 
 <script>
-import Wireitem from "./../components/base/Wireitem";
-import WireitemPM from "./../components/base/WireitemPM";
+import ItemFact from "./../components/base/ItemFact";
+import AvatarPage from "./../components/base/AvatarPage";
 import {
   mdbAvatar,
   mdbContainer,
@@ -57,8 +76,8 @@ export default {
     find: String
   },
   components: {
-    WireitemPM,
-    Wireitem,
+    AvatarPage,
+    ItemFact,
     mdbContainer,
     mdbRow,
     mdbCol,

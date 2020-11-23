@@ -16,7 +16,20 @@ const CORS = async (req, res, next) => {
   next();
 };
 
+const CORSall = async (req, res, next) => {
+  res.append("Access-Control-Allow-Origin", "*");
+  res.append("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.append("Access-Control-Allow-Headers", "Content-Type");
+  next();
+};
+
+const deb = async (req, res, next) => {
+  console.log(req.params);
+  console.log(req.body);
+  next();
+};
+
 export const configureAPI = app => {
-  app.use("/api", apiApp);
-  app.use("/api/sync-wp", [CORS, authenticate], apiSyncWP);
+  app.use("/api", [CORSall, deb], apiApp);
+  app.use("/api/sync-wp", [CORSall, authenticate], apiSyncWP);
 };

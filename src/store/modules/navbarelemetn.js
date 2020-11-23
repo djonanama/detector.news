@@ -1,4 +1,4 @@
-import paramQuery from "../env";
+import api from "../api.js";
 
 function list_to_tree(list) {
   var map = {},
@@ -69,18 +69,11 @@ export default {
       });
     },
     async fetchTopPersonMedia({ commit }, param) {
-      const res = await fetch(
-        paramQuery.URL + "/api/nav/humantop/" + param.api,
-        paramQuery.p
-      );
-      const person = await res.json();
-
+      const person = await api.getNavBarElement("/nav/humantop/", param.api);
       const data = lItemPersonMedia(person);
-
       for (var i = 0; i < data.length; i += 1) {
         data[i].id = data[i]._id;
       }
-
       const p = {
         item: param.itemMenu,
         data: data
@@ -88,17 +81,11 @@ export default {
       commit("updateMegaMenuItem", p);
     },
     async fetchTopRegions({ commit }) {
-      const res = await fetch(
-        paramQuery.URL + "/api/nav/rgiontop",
-        paramQuery.p
-      );
-      const topregion = await res.json();
+      const topregion = await api.getNavBarElement("/nav/rgiontop");
       const data = delItemRegion(topregion);
-
       for (var i = 0; i < data.length; i += 1) {
         data[i].id = data[i].posts.geo_locate.value;
       }
-
       const param = {
         item: "Регион",
         data: data
@@ -106,11 +93,7 @@ export default {
       commit("updateMegaMenuItem", param);
     },
     async fetchCategories({ commit }) {
-      const res = await fetch(
-        paramQuery.URL + "/api/nav/category",
-        paramQuery.p
-      );
-      const categories = await res.json();
+      const categories = await api.getNavBarElement("/nav/category");
       const data = list_to_tree(categories);
 
       const param = {
@@ -119,42 +102,16 @@ export default {
       };
       commit("updateMegaMenuItem", param);
     },
-    async fetchPosts({ commit }, id = "") {
-      const res = await fetch(
-        paramQuery.URL + "/api/posts/" + id,
-        paramQuery.p
-      );
-      const posts = await res.json();
-
-      commit("updateDataPost", posts);
-    },
-    async fetchStaticPost({ commit }, id) {
-      const res = await fetch(paramQuery.URL + "/api/post/" + id, paramQuery.p);
-      const data = await res.json();
-      commit("updateStaticPost", data);
-    }
   },
 
   mutations: {
     updateMegaMenuItem(state, param) {
       const { item, data } = param;
       state.data.megamenu[item].data = data;
-    },
-    updateDataPost(state, data) {
-      state.data.posts = data;
-    },
-    updateStaticPost(state, list) {
-      let res = list;
-      for (var i = 0; i < list.length; i += 1) {
-        res[i].page = list[i].page[0];
-      }
-      state.data.staticpost = list;
     }
   },
   state: {
     data: {
-      posts: [],
-      staticpost: [],
       megamenu: {
         Регион: {
           type: "region",
@@ -165,7 +122,7 @@ export default {
           data: []
         },
         Люди: {
-          type: "human",
+          type: "person",
           data: []
         },
         Медиа: {
@@ -203,12 +160,6 @@ export default {
   getters: {
     getMegaMenuItem(state) {
       return state.data.megamenu;
-    },
-    getPosts(state) {
-      return state.data.posts;
-    },
-    getStaticPost(state) {
-      return state.data.staticpost;
     }
   }
 };
