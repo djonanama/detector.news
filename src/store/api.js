@@ -1,11 +1,11 @@
 import Vue from "vue";
 import axios from "axios";
 
-// const WP_BackEnd_URL = process.env.WP_BackEnd_URL || "http://localhost";
-// const WP_BackEnd_PORT = process.env.WP_BackEnd_PORT || 4001;
+const WP_BackEnd_URL = process.env.WebSer_BackEnd_URL || "http://localhost";
+const WP_BackEnd_PORT = process.env.WebSer_BackEnd_PORT || 4001;
 
-const WP_BackEnd_URL = "http://localhost";
-const WP_BackEnd_PORT = 5001;
+// const WP_BackEnd_URL = "http://localhost";
+// const WP_BackEnd_PORT = 5001;
 
 const client = axios.create({
   baseURL: WP_BackEnd_URL + ":" + WP_BackEnd_PORT + "/",
