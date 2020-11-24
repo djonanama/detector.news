@@ -21,7 +21,7 @@ if [ "x$serviceID" != "x" ] && [ "x$node" != "x" ]; then
   echo "----------------------"
 else
   echo "----------------------"
-  echo "not val is serviceID or node or service !!!!!!"
+  echo "not val is serviceID or node or service !!!!"
   echo "----------------------"
   exit 1
 fi
