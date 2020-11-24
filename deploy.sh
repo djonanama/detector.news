@@ -10,11 +10,22 @@ service=detector_webserver-detector
 serviceID=$(sudo docker service ps -f name=$service -f desired-state=running $service -q --no-trunc |head -n1)
 node=$(sudo docker service ps -f name=$service -f desired-state=running $service --format="{{.Node}}"| head -n1 )
 
-echo "----------------------"
-echo "serviceID:$serviceID"
-echo "node:$node"
-echo "service:$service"
-echo "----------------------"
+if [ "x$serviceID" != "x" ] && [ "x$node" != "x" ]; then
+  echo "----------------------"
+  echo "service is WORK"
+  echo "----------------------"
+  echo "----------------------"
+  echo "serviceID:$serviceID"
+  echo "node:$node"
+  echo "service:$service"
+  echo "----------------------"
+else
+  echo "----------------------"
+  echo "not val is serviceID or node or service !!!!!"
+  echo "----------------------"
+  exit 1
+fi
+
 yarn install
 
 docker service scale detector_backend-node-blue=0
