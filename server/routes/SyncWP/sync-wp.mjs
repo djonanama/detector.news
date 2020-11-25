@@ -58,7 +58,7 @@ router.post("/:id", async (req, res) => {
       loadData.truth.delinvert(arrid);
     });
   }
-  if (body.status !== "publish" && body.type === "page") {
+  if (body.status !== "publish" && body.type === "post") {
     loadData.posts.del([params.id]);
   }
 
