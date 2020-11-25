@@ -51,20 +51,20 @@
           </mdb-chip>
         </mdb-col>
       </mdb-row>
-      <ul class="list-inline">
-        <li v-for="(item, index) in getOnlyPost.tag_val" :key="index">
-          <div>
-            <router-link
-              :to="{
-                name: 'posts',
-                params: { id: item.tag_id.toString(), type: 'tag' }
-              }"
-            >
-              <mdb-badge color="primary">#{{ item.name }}</mdb-badge>
-            </router-link>
-          </div>
-        </li>
-      </ul>
+
+      <section class="section-preview">
+        <router-link
+          v-for="(item, index) in getOnlyPost.tag_val"
+          :key="index"
+          :to="{
+            name: 'posts',
+            params: { id: item.tag_id.toString(), type: 'tag' }
+          }"
+        >
+          <span class="badge badge-light ml-2">#{{ item.name }}</span>
+        </router-link>
+      </section>
+
       <hr />
       <article
         class="post type-post status-publish format-standard has-post-thumbnail hentry category-new tag-media"
