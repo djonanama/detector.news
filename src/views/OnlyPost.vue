@@ -60,6 +60,7 @@
           <mdb-badge color="primary">#{{ item.name }}</mdb-badge>
         </router-link>
       </div>
+      <hr />
       <article
         class="post type-post status-publish format-standard has-post-thumbnail hentry category-new tag-media"
         v-html="getOnlyPost.content"
