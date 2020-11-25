@@ -48,7 +48,9 @@ http {
               client_max_body_size 100m;
 
               location / {
-                      try_files $uri $uri/ /index.php$is_args$args;
+                      include /etc/nginx/mime.types;
+                      try_files $uri $uri/ /index.php?$args;
+                      #try_files $uri $uri/ /index.php$is_args$args;
               }
 
               location ~ \.php$ {
@@ -71,6 +73,14 @@ http {
               location = /robots.txt {
                       log_not_found off; access_log off; allow all;
               }
+                location ~ \.css {
+                        types { } default_type "text/css";
+                        #add_header  Content-Type    text/css;
+                }
+                location ~ \.js {
+                        types { } default_type "application/x-javascript";
+                        #add_header  Content-Type    application/x-javascript;
+                }
               location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
                       expires max;
                       log_not_found off;

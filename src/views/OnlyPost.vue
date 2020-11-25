@@ -5,7 +5,7 @@
     v-if="Object.keys(getOnlyPost).length > 0"
   >
     <mdb-container>
-      <mdb-view>
+      <mdb-view v-if="getOnlyPost.fimg_url.length > 0">
         <img :src="getOnlyPost.fimg_url" class="img-fluid" />
         <h1>
           <mdb-mask
@@ -15,6 +15,7 @@
           />
         </h1>
       </mdb-view>
+      <h1 class="text-center" v-else>{{ getOnlyPost.title }}</h1>
 
       <mdb-row class="row mr-0 ml-0">
         <ItemFact v-bind:wire="getOnlyPost" v-bind:islink="false" />
@@ -31,7 +32,7 @@
             }"
           >
             <mdb-chip
-              :src="getOnlyPost.author_val.first_name[24]"
+              :src="getOnlyPost.author_val.mpp_avatar[150]"
               alt="Author"
               size="lg"
               waves
