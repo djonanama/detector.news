@@ -40,7 +40,7 @@ export default {
   state: {
     mp: { data: [], truth: [] },
     isadd: true,
-    param: { p: 0, l: 2 }
+    param: { p: 0, l: 20 }
   },
   getters: {
     getMainPosts(state) {

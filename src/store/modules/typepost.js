@@ -57,20 +57,32 @@ export default {
       state[str] = {
         mp: { data: [], truth: [] },
         isadd: true,
-        param: { p: 0, l: 2 }
+        param: { p: 0, l: 20 }
       };
     }
   },
   state: {
     thisType: "main",
-    region: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    theme: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    person: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    media: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    truth: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    tag: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    author: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } },
-    main: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 2 } }
+    region: {
+      mp: { data: [], truth: [] },
+      isadd: true,
+      param: { p: 0, l: 20 }
+    },
+    theme: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 20 } },
+    person: {
+      mp: { data: [], truth: [] },
+      isadd: true,
+      param: { p: 0, l: 20 }
+    },
+    media: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 20 } },
+    truth: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 20 } },
+    tag: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 20 } },
+    author: {
+      mp: { data: [], truth: [] },
+      isadd: true,
+      param: { p: 0, l: 20 }
+    },
+    main: { mp: { data: [], truth: [] }, isadd: true, param: { p: 0, l: 20 } }
   },
   getters: {
     getPosts(state) {

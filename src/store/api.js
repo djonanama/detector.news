@@ -27,7 +27,7 @@ export default {
       return req.data;
     });
   },
-  getPosts(path = "", body = { p: 0, l: 10 }) {
+  getPosts(path = "", body = { p: 0, l: 20 }) {
     return this.execute("post", "/items" + path, body);
   },
   getNavBarElement(path, param = "") {
