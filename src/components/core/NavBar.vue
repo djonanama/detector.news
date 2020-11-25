@@ -132,7 +132,7 @@ export default {
   name: "CoreNavBar",
   data() {
     return {
-      search: " ",
+      search: "",
       visiblesearch: {}
     };
   },
