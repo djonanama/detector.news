@@ -23,6 +23,7 @@
       <mdb-row class="justify-content-between">
         <mdb-col col="4">
           <router-link
+            v-if="Object.keys(getOnlyPost.author_val).length > 0"
             :to="{
               name: 'posts',
               params: {
