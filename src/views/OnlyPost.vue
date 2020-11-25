@@ -51,8 +51,12 @@
           </mdb-chip>
         </mdb-col>
       </mdb-row>
-      <mdb-row>
-        <mdb-col v-for="(item, index) in getOnlyPost.tag_val" :key="index">
+      <ul class="list-inline">
+        <li
+          class="col m"
+          v-for="(item, index) in getOnlyPost.tag_val"
+          :key="index"
+        >
           <div>
             <router-link
               :to="{
@@ -63,8 +67,8 @@
               <mdb-badge color="primary">#{{ item.name }}</mdb-badge>
             </router-link>
           </div>
-        </mdb-col>
-      </mdb-row>
+        </li>
+      </ul>
       <hr />
       <article
         class="post type-post status-publish format-standard has-post-thumbnail hentry category-new tag-media"
