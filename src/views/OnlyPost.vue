@@ -52,11 +52,7 @@
         </mdb-col>
       </mdb-row>
       <ul class="list-inline">
-        <li
-          class="col m"
-          v-for="(item, index) in getOnlyPost.tag_val"
-          :key="index"
-        >
+        <li v-for="(item, index) in getOnlyPost.tag_val" :key="index">
           <div>
             <router-link
               :to="{

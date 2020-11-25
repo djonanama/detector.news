@@ -34,7 +34,7 @@
               to="/factcheck"
             > -->
               <mdb-btn outline="primary" style="width: 230px" disabled>
-                Suggest a Fact-check
+                Предложить фактчек
               </mdb-btn>
               <!-- </router-link> -->
             </p>
