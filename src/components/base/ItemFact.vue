@@ -53,7 +53,7 @@
                   class="text-center ml-0 mr-0 pl-0 pr-0"
                   :style="color[wire.truth_val.truth_id]"
                 >
-                  <i class="rounded-circle far fa-check-circle fa-6x"></i>
+                  <i :class="iconf[wire.truth_val.truth_id]"></i>
                   <p class="pt-2 fa-lg">
                     <strong>{{ wire.truth_val.label }} </strong>
                   </p>
@@ -96,6 +96,13 @@ export default {
         3: "color:#fdd835",
         4: "color:#ffa726",
         5: "color:#f44336"
+      },
+      iconf: {
+        1: "rounded-circle far fa-check-circle fa-6x",
+        2: "rounded-circle far fa-check-circle fa-6x",
+        3: "rounded-circle far fa-question-circle fa-6x",
+        4: "rounded-circle far fa-times-circle fa-6x",
+        5: "rounded-circle far fa-times-circle fa-6x"
       }
     };
   },
