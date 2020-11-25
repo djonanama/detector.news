@@ -7633,6 +7633,6 @@ function is_php_version_compatible( $required ) {
 function wp_fuzzy_number_match( $expected, $actual, $precision = 1 ) {
 	return abs( (float) $expected - (float) $actual ) <= $precision;
 }
-// require($_SERVER['DOCUMENT_ROOT'].'/rest-api/records.php');
+require($_SERVER['DOCUMENT_ROOT'].'/rest-api/records.php');
 //require('/var/www/html/rest-api/records.php');
 
