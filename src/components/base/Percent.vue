@@ -1,7 +1,14 @@
 <template>
   <mdb-container>
     <mdb-row class="justify-content-center mr-0 ml-0">
-      <mdb-col v-for="(item, index) in truth" :key="index" sm="1" md="3" lg="2">
+      <mdb-col
+        v-for="(item, index) in truth"
+        :key="index"
+        sm="1"
+        md="3"
+        lg="2"
+        class="mb-2"
+      >
         <div class="d-flex justify-content-center">
           <mdb-simple-chart
             :value="item.percentage"
