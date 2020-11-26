@@ -58,7 +58,7 @@
     <mdb-navbar-toggler>
       <mdb-navbar-nav right class="mt-3">
         <mdb-input
-          class="mt-0 mb-3"
+          class="mt-0 mb-3 inputwhite"
           placeholder="Что вы ищете?"
           ariaDescribedBy="button-addon2"
           v-model="search"
@@ -69,30 +69,10 @@
             group
             slot="append"
             id="button-addon2"
-            >button</mdb-btn
+            @click="goSearch()"
+            >Найти</mdb-btn
           >
         </mdb-input>
-        <!-- <div class="row align-items-center">
-          <div class="col-10 col-lg-11 pl-5">
-            <div class="md-form">
-              <input
-                type="text"
-                class="form-control mb-0 mt-0"
-                v-model="search"
-              />
-            </div>
-          </div>
-          <div class="col-2 col-lg-1 text-center">
-            <router-link
-              class="mt-2"
-              :to="{ name: 'search', params: { find: search + ' ' } }"
-            >
-              <button class="btn btn-primary mb-0" @click="trigger">
-                Найти
-              </button>
-            </router-link>
-          </div>
-        </div> -->
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -180,6 +160,12 @@ export default {
     trigger() {
       var el = this.$el.querySelector(".navbar-toggler");
       el.click();
+    },
+    goSearch() {
+      this.$router.push({
+        name: "search",
+        params: { find: this.search + " " }
+      });
     }
   },
   async mounted() {
@@ -194,12 +180,12 @@ export default {
     max-height: 100vh !important;
     overflow-x: hidden !important;
 }
-input {
-  border-bottom: 1px solid #33b5e5 !important;color: #ced4da !important;
-  color: #ced4da !important;
-}
 </style>
 <style>
+.inputwhite > input {
+  /* border-bottom: 1px solid #33b5e5 !important;color: #ced4da !important; */
+  color: #ced4da !important;
+}
 section.preview {
   border: 1px solid #e0e0e0;
   padding: 15px;

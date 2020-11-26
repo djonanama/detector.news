@@ -45,47 +45,13 @@
             </router-link>
           </div>
           <div style="float: right">
-            <mdb-chip color="white lighten-4" size="lg">
+            <mdb-chip color="white lighten-4" size="lg" waves="false">
               Дата публикации:
               {{ moment(getOnlyPost.date).format("DD.MM.YYYY") }}
             </mdb-chip>
           </div>
         </mdb-col>
       </mdb-row>
-
-      <!--  -->
-      <!-- <mdb-row class="justify-content-between">
-        <mdb-col col="4">
-          <router-link
-            v-if="Object.keys(getOnlyPost.author_val).length > 0"
-            :to="{
-              name: 'posts',
-              params: {
-                id: getOnlyPost.author_val.author_id.toString(),
-                type: 'author'
-              }
-            }"
-          >
-            <mdb-chip
-              :src="getOnlyPost.author_val.mpp_avatar[150]"
-              alt="Author"
-              size="lg"
-              waves
-            >
-              {{ getOnlyPost.author_val.first_name }}
-              {{ getOnlyPost.author_val.last_name }}</mdb-chip
-            >
-          </router-link>
-
-     
-        </mdb-col>
-        <mdb-col col="4 text-right">
-          <mdb-chip color="white lighten-4" size="lg">
-            Дата публикации: {{ moment(getOnlyPost.date).format("DD.MM.YYYY") }}
-          </mdb-chip>
-        </mdb-col>
-      </mdb-row> -->
-      <!--  -->
       <section class="section-preview">
         <router-link
           v-for="(item, index) in getOnlyPost.tag_val"

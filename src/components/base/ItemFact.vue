@@ -19,9 +19,9 @@
             </mdb-card-body>
           </div>
 
-          <div class="col-md-8 mt-4 mb-auto">
+          <div class="col-md-9 mt-4 mb-auto">
             <div class="row">
-              <div class="col-sm-8 col-md-9 col-lg-9 mr-0">
+              <div class="col-sm-8 col-md-8">
                 <mdb-card-body class="p-0" v-if="islink == false">
                   <p class="dark-grey-text blockquote bq-primary">
                     <mdb-icon icon="quote-left" class="pr-2"></mdb-icon>
@@ -49,7 +49,7 @@
                 </p>
               </div>
 
-              <div class="col-sm-4 col-md-3 col-lg-3 mt-auto mb-auto ml-auto mr-auto pr-0 pl-0">
+              <div class="col-sm-4 col-md-4">
                 <div
                   class="text-center ml-0 mr-0 pl-0 pr-0"
                   :style="color[wire.truth_val.truth_id]"
