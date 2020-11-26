@@ -20,7 +20,7 @@
 
           <div class="col-md-9 mt-4 mb-auto">
             <div class="row mr-1">
-              <div class="col-8">
+              <div class="col-md-8">
                 <mdb-card-body class="p-0" v-if="islink == false">
                   <p class="dark-grey-text blockquote bq-primary">
                     <mdb-icon icon="quote-left" class="pr-2"></mdb-icon>
@@ -48,7 +48,7 @@
                 </p>
               </div>
 
-              <div class="col-4 mt-auto mb-auto ml-auto mr-auto pr-0 pl-0">
+              <div class="col-md-4 mt-auto mb-auto ml-auto mr-auto pr-0 pl-0">
                 <div
                   class="text-center ml-0 mr-0 pl-0 pr-0"
                   :style="color[wire.truth_val.truth_id]"

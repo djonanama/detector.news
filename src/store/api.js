@@ -3,12 +3,16 @@ import axios from "axios";
 
 // const WP_BackEnd_URL = process.env.WebSer_BackEnd_URL || "https://detector.news";
 // const WP_BackEnd_PORT = process.env.WebSer_BackEnd_PORT || 80;
+// const BackEnd_MODE = process.env.BackEnd_MODE || "prod";
+// let baseURL = "/";
+// if (BackEnd_MODE == "dev") {
+//   baseURL = "http://localhost:5001/";
+// }
 
-// const WP_BackEnd_URL = "http://localhost";
-// const WP_BackEnd_PORT = 5001;
-
+// const baseURL = "/";
+const baseURL = "http://localhost:5001/";
 const client = axios.create({
-  baseURL: "/", //WP_BackEnd_URL + ":" + WP_BackEnd_PORT 
+  baseURL: baseURL,
   json: true
 });
 

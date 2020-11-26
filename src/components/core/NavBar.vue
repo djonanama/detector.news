@@ -72,7 +72,7 @@
           <div class="col-2">
             <router-link
               class="col-2 mt-2"
-              :to="{ name: 'search', params: { find: search } }"
+              :to="{ name: 'search', params: { find: search + ' ' } }"
             >
             <button
               class="btn btn-info mb-0"

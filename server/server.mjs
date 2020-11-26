@@ -5,15 +5,16 @@ import morgan from "morgan";
 import connectDb from "./connectDB.mjs";
 import { configureAPI } from "./configure.mjs";
 
-import fs from "fs";
-
 const PORT = process.env.BackEnd_PORT || 3000;
 const HOST = process.env.BackEnd_HOST || "localhost";
+const BackEnd_MODE = process.env.BackEnd_MODE || "prod";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(morgan("dev"));
+if (BackEnd_MODE == "dev") {
+  app.use(morgan("dev"));
+}
 
 // API
 configureAPI(app);

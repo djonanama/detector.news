@@ -1,7 +1,7 @@
 <template>
   <div id="home row" v-if="Object.keys(getSearch).length > 0">
     <h2 class="col">
-      Результат поиcка: <i class="blue-text">"{{ find }}"</i>
+      Результат поиcка: <i class="blue-text">"{{ find.trim() }}"</i>
     </h2>
 
     <mdb-row class="text-center col">
@@ -104,11 +104,11 @@ export default {
     ...mapActions(["fetchSearch"])
   },
   async mounted() {
-    this.fetchSearch(this.find);
+    this.fetchSearch(this.find.trim());
   },
   watch: {
     find: function(newVal, oldVal) {
-      this.fetchSearch(newVal);
+      this.fetchSearch(newVal.trim());
     }
   }
 };

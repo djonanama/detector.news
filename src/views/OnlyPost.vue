@@ -10,7 +10,7 @@
         <h1>
           <mdb-mask
             flex-center
-            overlay="black-light"
+            overlay="black-light text-center"
             :text="getOnlyPost.title"
           />
         </h1>
@@ -20,7 +20,41 @@
       <mdb-row class="row mr-0 ml-0">
         <ItemFact v-bind:wire="getOnlyPost" v-bind:islink="false" />
       </mdb-row>
-      <mdb-row class="justify-content-between">
+      <mdb-row>
+        <mdb-col>
+          <div style="float: left">
+            <router-link
+              v-if="Object.keys(getOnlyPost.author_val).length > 0"
+              :to="{
+                name: 'posts',
+                params: {
+                  id: getOnlyPost.author_val.author_id.toString(),
+                  type: 'author'
+                }
+              }"
+            >
+              <mdb-chip
+                :src="getOnlyPost.author_val.mpp_avatar[150]"
+                alt="Author"
+                size="lg"
+                waves
+              >
+                {{ getOnlyPost.author_val.first_name }}
+                {{ getOnlyPost.author_val.last_name }}</mdb-chip
+              >
+            </router-link>
+          </div>
+          <div style="float: right">
+            <mdb-chip color="white lighten-4" size="lg">
+              Дата публикации:
+              {{ moment(getOnlyPost.date).format("DD.MM.YYYY") }}
+            </mdb-chip>
+          </div>
+        </mdb-col>
+      </mdb-row>
+
+      <!--  -->
+      <!-- <mdb-row class="justify-content-between">
         <mdb-col col="4">
           <router-link
             v-if="Object.keys(getOnlyPost.author_val).length > 0"
@@ -43,15 +77,15 @@
             >
           </router-link>
 
-          <!-- teg: -->
+     
         </mdb-col>
         <mdb-col col="4 text-right">
           <mdb-chip color="white lighten-4" size="lg">
             Дата публикации: {{ moment(getOnlyPost.date).format("DD.MM.YYYY") }}
           </mdb-chip>
         </mdb-col>
-      </mdb-row>
-
+      </mdb-row> -->
+      <!--  -->
       <section class="section-preview">
         <router-link
           v-for="(item, index) in getOnlyPost.tag_val"
