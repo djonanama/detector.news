@@ -56,20 +56,33 @@
     
        navbar-collapse hide-navbar collapse overflow: initial; -->
     <mdb-navbar-toggler>
-      <mdb-navbar-nav right>
-        <div class="row align-items-center">
+      <mdb-navbar-nav right class="mt-3">
+        <mdb-input
+          class="mt-0 mb-3"
+          placeholder="Что вы ищете?"
+          ariaDescribedBy="button-addon2"
+          v-model="search"
+        >
+          <mdb-btn
+            color="primary"
+            size="md"
+            group
+            slot="append"
+            id="button-addon2"
+            >button</mdb-btn
+          >
+        </mdb-input>
+        <!-- <div class="row align-items-center">
           <div class="col-10 col-lg-11 pl-5">
             <div class="md-form">
               <input
                 type="text"
                 class="form-control mb-0 mt-0"
-                id="inlineFormInputMD"
                 v-model="search"
               />
-              <label class="sr-only" for="inlineFormInputMD">Name</label>
             </div>
           </div>
-          <div class="col-2 col-lg-1">
+          <div class="col-2 col-lg-1 text-center">
             <router-link
               class="mt-2"
               :to="{ name: 'search', params: { find: search + ' ' } }"
@@ -79,7 +92,7 @@
               </button>
             </router-link>
           </div>
-        </div>
+        </div> -->
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -184,5 +197,11 @@ export default {
 input {
   border-bottom: 1px solid #33b5e5 !important;color: #ced4da !important;
   color: #ced4da !important;
+}
+</style>
+<style>
+section.preview {
+  border: 1px solid #e0e0e0;
+  padding: 15px;
 }
 </style>
