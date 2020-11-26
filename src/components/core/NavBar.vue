@@ -74,12 +74,9 @@
               class="col-2 mt-2"
               :to="{ name: 'search', params: { find: search + ' ' } }"
             >
-            <button
-              class="btn btn-info mb-0"
-              @click="trigger"
-            >
-              Найти
-            </button>
+              <button class="btn btn-info mb-0" @click="trigger">
+                Найти
+              </button>
             </router-link>
           </div>
         </div>
