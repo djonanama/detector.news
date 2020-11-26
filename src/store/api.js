@@ -9,8 +9,8 @@ import axios from "axios";
 //   baseURL = "http://localhost:5001/";
 // }
 
-// const baseURL = "/";
-const baseURL = "http://localhost:5001/";
+const baseURL = "/";
+// const baseURL = "http://localhost:5001/";
 const client = axios.create({
   baseURL: baseURL,
   json: true
