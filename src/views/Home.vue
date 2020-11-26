@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <mdb-row class="row mr-0 ml-0">
+    <mdb-row class="row justify-content-center mr-0 ml-0">
       <mdb-col
         col="12"
         sm="12"
