@@ -58,7 +58,7 @@
     <mdb-navbar-toggler>
       <mdb-navbar-nav right>
         <div class="row align-items-center">
-          <div class="col-10 pl-5">
+          <div class="col-10 col-lg-11 pl-5">
             <div class="md-form">
               <input
                 type="text"
@@ -69,12 +69,12 @@
               <label class="sr-only" for="inlineFormInputMD">Name</label>
             </div>
           </div>
-          <div class="col-2">
+          <div class="col-2 col-lg-1">
             <router-link
-              class="col-2 mt-2"
+              class="mt-2"
               :to="{ name: 'search', params: { find: search + ' ' } }"
             >
-              <button class="btn btn-info mb-0" @click="trigger">
+              <button class="btn btn-primary mb-0" @click="trigger">
                 Найти
               </button>
             </router-link>
