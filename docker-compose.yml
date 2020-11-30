@@ -189,7 +189,7 @@ services:
             - webnet
 
     webserver-detector:
-        image: nginx:1.15.12-alpine
+        image: nginx:1.19.5-alpine
         depends_on:
             - wordpress-cms
             - elasticsearch
