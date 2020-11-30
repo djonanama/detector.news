@@ -10,6 +10,7 @@
         md="12"
         lg="12"
         xl="6"
+        class="mt-auto mb-auto"
         v-for="(item, index) in getPosts.data"
         :key="index"
       >

@@ -7,13 +7,14 @@
         md="12"
         lg="12"
         xl="6"
+        class="mt-auto mb-auto"
         v-for="(item, index) in getPosts.data"
         :key="index"
       >
         <ItemFact v-bind:wire="item" v-bind:islink="true" />
       </mdb-col>
     </mdb-row>
-
+ 
     <mdb-row class="justify-content-center mr-0 ml-0">
       <mdb-col col="0">
         <mdb-btn

@@ -36,6 +36,7 @@
         md="12"
         lg="12"
         xl="6"
+        class="mt-auto mb-auto"
         v-for="(item, index) in getSearch.post[1].data"
         :key="index"
       >
