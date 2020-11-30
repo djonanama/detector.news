@@ -8,7 +8,7 @@
       <mdb-col sm="2" />
       <mdb-col sm="4">
         <mdb-btn flat size="lg" darkWaves style="width:280px" disabled>
-          <h2>{{ getSearch.page[1].count }}</h2>
+          <h2>{{ getSearch.page[0].count }}</h2>
           <mdb-card-title><ins>Люди и Медиа</ins></mdb-card-title>
         </mdb-btn>
       </mdb-col>

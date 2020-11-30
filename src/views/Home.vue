@@ -1,12 +1,13 @@
 <template>
   <div id="home">
-    <mdb-row class="row justify-content-center mr-0 ml-0">
+    <mdb-row class="justify-content-center mr-0 ml-0 ">
       <mdb-col
         col="12"
         sm="12"
         md="12"
         lg="12"
         xl="6"
+        class="mt-auto mb-auto"
         v-for="(item, index) in getMainPosts.data"
         :key="index"
       >
@@ -28,6 +29,9 @@
 import ItemFact from "./../components/base/ItemFact";
 import Percent from "./../components/base/Percent";
 import {
+  mdbMasonry,
+  mdbMasonryItem,
+  mdbCardGroup,
   mdbCard,
   mdbCardImage,
   mdbCardBody,
@@ -45,6 +49,9 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Home",
   components: {
+    mdbMasonry,
+    mdbMasonryItem,
+    mdbCardGroup,
     mdbCard,
     mdbCardImage,
     mdbCardBody,
@@ -76,12 +83,3 @@ export default {
   }
 };
 </script>
-
-<style lang="stylus" scoped>
-
-.chip-lg .chipBig * {
-	height: 104px !important;
-	line-height: 104px !important;
-	border-radius: 26px;
-}
-</style>

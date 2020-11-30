@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
   }
 
   resData = await PostModel.find(queryDB)
-    //.sort({ date: -1 })
+    .sort({ date: -1 })
     .populate(agent)
     .populate("truth_val", "-_id -__v")
     .skip(p * l)
@@ -94,7 +94,7 @@ router.post("/:type/:id", async (req, res) => {
   }
   console.log(queryDB);
   resData = await PostModel.find(queryDB)
-    //.sort({ date: -1 })
+    .sort({ date: -1 })
     .populate(agent)
     .populate("truth_val", "-_id -__v")
     .skip(p * l)
@@ -163,7 +163,7 @@ router.post("/:type/:id/truth/:tid", async (req, res) => {
   }
 
   resData = await PostModel.find(queryDB)
-    //.sort({ date: -1 })
+    .sort({ date: -1 })
     .populate(agent)
     .populate("truth_val", "-_id -__v")
     .skip(p * l)

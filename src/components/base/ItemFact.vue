@@ -49,7 +49,7 @@
                 </p>
               </div>
 
-              <div class="col-sm-4 col-md-4">
+              <div class="col-sm-4 col-md-4 mt-auto mb-auto">
                 <div
                   class="text-center ml-0 mr-0 pl-0 pr-0"
                   :style="color[wire.truth_val.truth_id]"
@@ -73,6 +73,7 @@ import {
   mdbContainer,
   mdbRow,
   mdbCol,
+  mdbCardGroup,
   mdbCard,
   mdbCardBody,
   mdbCardUp,
@@ -111,6 +112,7 @@ export default {
     moment
   },
   components: {
+    mdbCardGroup,
     mdbContainer,
     mdbRow,
     mdbCol,

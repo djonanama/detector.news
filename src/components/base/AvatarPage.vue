@@ -13,8 +13,8 @@
           :to="{
             name: 'posts',
             params: {
-              id: item.agent_val.page_id.toString(),
-              type: item.agent_val.type_s.value
+              id: item.page_id.toString(),
+              type: item.type_s.value
             }
           }"
         >
@@ -22,11 +22,11 @@
             <mdb-card-avatar color="white" class="mx-auto"
               ><img
                 style="width: 150px"
-                :src="item.agent_val.fimg_url"
+                :src="item.fimg_url"
                 class="rounded-circle"
             /></mdb-card-avatar>
             <mdb-card-body>
-              <mdb-card-title>{{ item.agent_val.title }}</mdb-card-title>
+              <mdb-card-title>{{ item.title }}</mdb-card-title>
             </mdb-card-body>
           </mdb-card>
         </router-link>

@@ -7,7 +7,7 @@
             :value="item.percentage"
             :color="color[item.truth_id]"
           >
-            {{ item.percentage }}%
+            {{ item.percentage.substring(0, 5) }}%
           </mdb-simple-chart>
         </div>
         <div class="d-flex justify-content-center mt-3 mb-4">

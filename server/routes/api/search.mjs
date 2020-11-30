@@ -7,6 +7,7 @@ import express from "express";
 const router = express.Router();
 
 import mPost from "../../models/Post.mjs";
+import mPage from "../../models/Page.mjs";
 
 async function Search(text, index, fields = []) {
   const t = text.split(" ").length == 1 ? "*" + text + "*" : text;
@@ -33,29 +34,35 @@ async function Search(text, index, fields = []) {
 
 async function getItemsFact(type, ids, p = 0, l = 10) {
   let queryDB = {};
+  let resData = {};
   switch (type) {
     case "post":
       queryDB = { post_id: { $in: ids } };
+      resData = await mPost
+        .find(queryDB)
+        .sort({ date: -1 })
+        .populate("agent_val", "-_id -__v -modified -date -content")
+        .populate("truth_val", "-_id -__v")
+        .skip(p * l)
+        .limit(l)
+        .select(
+          "post_id date_of_statement message link_source_agent_page_id agent_val truth_val truth"
+        )
+        .lean();
+      resData = resData.filter(dr => {
+        return dr.agent_val !== null && dr.truth_val !== null;
+      });
       break;
     case "page":
-      queryDB = { link_source_agent_page_id: { $in: ids } };
+      queryDB = { page_id: { $in: ids } };
+      resData = await mPage
+        .find(queryDB)
+        .sort({ date: -1 })
+        .skip(p * l)
+        .limit(l)
+        .lean();
       break;
   }
-  let resData = {};
-
-  resData = await mPost
-    .find(queryDB)
-    .populate("agent_val", "-_id -__v -modified -date -content")
-    .populate("truth_val", "-_id -__v")
-    .skip(p * l)
-    .limit(l)
-    .select(
-      "post_id date_of_statement message link_source_agent_page_id agent_val truth_val truth"
-    )
-    .lean();
-  resData = resData.filter(dr => {
-    return dr.agent_val !== null && dr.truth_val !== null;
-  });
 
   return { data: resData, count: resData.length };
 }
