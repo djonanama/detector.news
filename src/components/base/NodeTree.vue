@@ -1,6 +1,8 @@
 <template>
   <li class="tree">
-    <router-link :to="{ name: 'posts', params: { id: node.id.toString() , type: type } }">
+    <router-link
+      :to="{ name: 'posts', params: { id: node.id.toString(), type: type } }"
+    >
       <!-- to="{name: 'post', params: {id:child.id, type:type}}" -->
       {{ node.name }}
     </router-link>

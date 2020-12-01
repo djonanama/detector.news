@@ -25,18 +25,6 @@ function list_to_tree(list) {
   return roots;
 }
 
-function delItemRegion(list) {
-  var i, j;
-  for (i = 0; i < list.length; i += 1) {
-    for (j = 0; j < list[i].posts.length; j += 1) {
-      var { post_id, geo_locate } = list[i].posts[j];
-      list[i].posts = { post_id: post_id, geo_locate: geo_locate };
-      list[i].name = list[i]._id.substring(list[i]._id.lastIndexOf("/ ") + 2);
-    }
-  }
-  return list;
-}
-
 function lItemPersonMedia(list) {
   var i, j;
   for (i = 0; i < list.length; i += 1) {
@@ -82,13 +70,14 @@ export default {
     },
     async fetchTopRegions({ commit }) {
       const topregion = await api.getNavBarElement("/nav/rgiontop");
-      const data = delItemRegion(topregion);
-      for (var i = 0; i < data.length; i += 1) {
-        data[i].id = data[i].posts.geo_locate.value;
+      for (var i = 0; i < topregion.length; i += 1) {
+        topregion[i].name = topregion[i].label.substring(
+          topregion[i].label.lastIndexOf("/ ") + 2
+        );
       }
       const param = {
         item: "Регион",
-        data: data
+        data: topregion
       };
       commit("updateMegaMenuItem", param);
     },
@@ -101,7 +90,7 @@ export default {
         data: data
       };
       commit("updateMegaMenuItem", param);
-    },
+    }
   },
 
   mutations: {

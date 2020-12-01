@@ -7,15 +7,31 @@ import RecordCategory from "../../models/Category.mjs";
 router.get("/rgiontop", async (req, res) => {
   const r = await RecordPost.aggregate(
     [
-      { $group: { _id: "$geo_locate.label", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 10 },
       {
-        $lookup: {
-          from: "Post",
-          localField: "_id",
-          foreignField: "geo_locate.label",
-          as: "posts"
+        $group: {
+          _id: "$geo_locate.value",
+          val: {
+            $first: "$geo_locate.label"
+          },
+          count: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $sort: {
+          count: -1
+        }
+      },
+      {
+        $limit: 10
+      },
+      {
+        $project: {
+          _id: 0,
+          id: "$_id",
+          label: "$val",
+          count: "$count"
         }
       }
     ],
