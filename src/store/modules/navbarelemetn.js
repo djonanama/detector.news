@@ -76,7 +76,7 @@ export default {
         );
       }
       const param = {
-        item: "Регион",
+        item: "Геолокация",
         data: topregion
       };
       commit("updateMegaMenuItem", param);
@@ -102,7 +102,7 @@ export default {
   state: {
     data: {
       megamenu: {
-        Регион: {
+        Геолокация: {
           type: "region",
           data: []
         },

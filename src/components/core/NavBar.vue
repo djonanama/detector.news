@@ -62,6 +62,7 @@
           placeholder="Что вы ищете?"
           ariaDescribedBy="button-addon2"
           v-model="search"
+          @keyup="goSearch()"
         >
           <mdb-btn
             color="primary"
