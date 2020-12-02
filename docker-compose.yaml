@@ -191,7 +191,6 @@ services:
             - wpnet
             - webnet
 
-            # [node.labels.nodename == webserver] 
     webserver-detector:
         image: nginx:1.19.5-alpine
         deploy:
