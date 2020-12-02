@@ -52,6 +52,7 @@
         </mdb-dropdown-menu>
       </mdb-dropdown>
     </mdb-navbar-nav>
+    
     <!-- navbar-collapse show-navbar  style overflow: initial; 
        navbar-collapse hide-navbar collapse overflow: initial; -->
     <mdb-navbar-toggler>
