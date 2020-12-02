@@ -200,7 +200,7 @@ services:
             placement:
                 constraints:
                     - node.labels.nodename == webserver-detector
-                    - node.labels.nodename == webserver
+                    # - node.labels.nodename == webserver
         env_file:
             - .env
         environment:
