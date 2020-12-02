@@ -191,15 +191,16 @@ services:
             - wpnet
             - webnet
 
+            # [node.labels.nodename == webserver] 
     webserver-detector:
         image: nginx:1.19.5-alpine
         deploy:
             mode: replicated
             replicas: 1
             placement:
-                constraints: [node.labels.nodename == webserver] 
-                    # - node.labels.nodename == webserver-detector
-                    # - node.labels.nodename == webserver
+                constraints:
+                    - node.labels.nodename == webserver-detector
+                    - node.labels.nodename == webserver
         env_file:
             - .env
         environment:
